@@ -38,9 +38,11 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemView
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeableItemViewHolder;
 import com.progress_android.R;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -244,77 +246,58 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
     private void showTomatoSettingDialog(final int position){
-        EventItem eventItem = eventList.get(position);
-        TimeAmount timeAmount = eventItem.getTimeAmount();
-        Calendar selectedTime = Calendar.getInstance();
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d H:m:s");
-            if (timeAmount != null) {
-                Log.d(TAG, "timeAmount second = " + timeAmount.getPomodoro().getRelax());
-                Date date = dateFormat.parse("2014-1-1 " + timeAmount.getPomodoroNums() + ":" + timeAmount.getPomodoro().getWork() + ":" + timeAmount.getPomodoro().getRelax());
-                selectedTime.setTime(date);
-            }
-            // 按特定格式显示刚设置的时间
-            String str = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS")).format(selectedTime.getTime());
-            Log.d(TAG, str);
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(2014, 1, 1, 1,1);
-        Calendar endDate = Calendar.getInstance();
-        endDate.set(2014, 1, 1, 5, 59);
-        //时间选择器 ，自定义布局
-        final TimePickerView timePickerDialog = new TimePickerBuilder(context, new OnTimeSelectListener() {
+
+        final OptionsPickerView tomatoSettingDialog = new OptionsPickerBuilder(context, new OnOptionsSelectListener() {
             @Override
-            public void onTimeSelect(Date date, View v) {//选中事件回调
-                Log.d(TAG,"onTimeSelected");
-                String data = getTime(date);
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
                 EventItem eventItem = eventList.get(position);
-                eventItem.setTimeAmount(getTimeAmount(data));
+                eventItem.setTimeAmount(new TimeAmount(new Pomodoro(option2+1,options3+1),options1+1));
                 notifyItemChanged(position);
+                Toast.makeText(context,"1="+options1 +" 2="+option2+" 3="+options3,Toast.LENGTH_LONG).show();
 
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
-                }
+            }
         })
-                .setRangDate(startDate, endDate)
                 .setLayoutRes(R.layout.tomatotimesettingdialog, new CustomListener() {
-
                     @Override
                     public void customLayout(View v) {
-                        tomato_setting_cancel_button = v.findViewById(R.id.tomato_setting_cancel_button);
-                        tomato_setting_confirm_button = v.findViewById(R.id.tomato_setting_confirm_button);
-                        }
+                        tomato_setting_cancel_button = (Button) v.findViewById(R.id.tomato_setting_cancel_button);
+                        tomato_setting_confirm_button = (Button) v.findViewById(R.id.tomato_setting_confirm_button);
+                    }
                 })
-                .setContentTextSize(25)
-                .setType(new boolean[]{false, false, false, true, true, true})
-                .setLineSpacingMultiplier(1.2f)
-                .setTextXOffset(0, 0, 0, 0, 0, 0)
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。(这个函数有问题)
-                .setDividerColor(0xFF24AD9D)
                 .isDialog(true)
-                .setLabel(null,null,"","","分","分")
-                //.setTextXOffset(10,10,10,10,10,10)
-                .setDate(selectedTime)
+                .setOutSideCancelable(false)
                 .build();
+        TimeAmount timeAmount = eventList.get(position).getTimeAmount();
+        if(timeAmount!=null){
+            Log.d(TAG,"num=" + timeAmount.getPomodoroNums() +" "+timeAmount.getPomodoro().toString());
+            tomatoSettingDialog.setSelectOptions(timeAmount.getPomodoroNums()-1, timeAmount.getPomodoro().getWork()-1,timeAmount.getPomodoro().getRelax()-1);
+        }else {
+            tomatoSettingDialog.setSelectOptions(0, 0, 0);
+        }
+        List<Integer> num = Arrays.asList(1,2,3,4);
+        List<Integer> mins = new ArrayList<>();
+        for(int i=0;i<59;++i){
+            mins.add(i+1);
+        }
+        tomatoSettingDialog.setNPicker(num,mins,mins);
 
         tomato_setting_cancel_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                timePickerDialog.dismiss();
+                tomatoSettingDialog.dismiss();
             }
         });
 
         tomato_setting_confirm_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                timePickerDialog.returnData();
-                timePickerDialog.dismiss();
+                tomatoSettingDialog.returnData();
+                tomatoSettingDialog.dismiss();
             }
         });
 
-        timePickerDialog.show();
+        tomatoSettingDialog.show();
     }
 
     private String getTime(Date date) {//可根据需要自行截取数据显示
