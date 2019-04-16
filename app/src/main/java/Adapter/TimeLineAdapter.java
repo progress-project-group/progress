@@ -5,17 +5,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.progress_android.R;
+import Dialog.startTimeSettingDialog;
 
 import java.util.List;
 
 import Item.ItemInTimeline;
-import androidx.core.content.ContextCompat;
+import Item.Time.MyTime;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -34,6 +35,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         ImageView timePointImage;
         View timeAmount;
         View ambTimeline;
+        Button timeLineItemDeleteButton;
+        Button timeLineItemSettingButton;
 
         public ViewHolder(View view){
             super(view);
@@ -42,6 +45,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             timePointImage = (ImageView) view.findViewById(R.id.time_point_image);
             timeAmount = (View) view.findViewById(R.id.time_amount);
             ambTimeline = (View) view.findViewById(R.id.ambiguous_timeline);
+            timeLineItemDeleteButton = (Button) view.findViewById(R.id.timeLineItem_delete_button);
+            timeLineItemSettingButton = (Button) view.findViewById(R.id.timeLineItem_setting_button);
         }
     }
 
@@ -54,7 +59,27 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d(TAG,"onCreateViewHolder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timelineitem,parent,false);
-        ViewHolder holder = new ViewHolder(view);
+        final ViewHolder holder = new ViewHolder(view);
+
+        holder.timeLineItemDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.timeLineItemDeleteButton.setClickable(false);
+                int position = holder.getAdapterPosition();
+                mItemInTimelineList.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.timeLineItemSettingButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                startTimeSettingDialog newFragment = new startTimeSettingDialog();
+                newFragment.position = holder.getAdapterPosition();
+                newFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "startTimePicker");
+            }
+        });
         Log.d(TAG,"construct ViewHolder");
         return holder;
     }
@@ -98,5 +123,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mItemInTimelineList.size();
+    }
+
+    public void updateItem(MyTime myTime, int position){
+        mItemInTimelineList.get(position).setStartTime(myTime);
+        notifyItemChanged(position);
     }
 }

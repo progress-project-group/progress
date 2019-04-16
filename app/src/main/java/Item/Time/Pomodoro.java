@@ -37,4 +37,8 @@ public class Pomodoro {
         this.work = work;
         this.relax = relax;
     }
+
+    public String getPompInfor(){
+        return work + ":" + relax;
+    }
 }

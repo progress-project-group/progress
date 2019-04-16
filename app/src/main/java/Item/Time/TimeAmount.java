@@ -10,8 +10,6 @@ public class TimeAmount {
     private Pomodoro pomodoro;
     private  int pomodoroNums;
 
-    public static void lala(){};
-
     public String getRealtime(){
         int hours = minutes/60;
         int mins = minutes%60;
@@ -36,6 +34,10 @@ public class TimeAmount {
         return pomodoroNums;
     }
 
+    public Pomodoro getPomodoro(){
+        return pomodoro;
+    }
+
     public TimeAmount(int minutes){
         this.minutes = minutes;
     }
@@ -46,8 +48,4 @@ public class TimeAmount {
 
         this.minutes = pomodoro.getTotal()*pomodoroNums;
     }
-
-    //还需要一个用户设置时间，让系统自动配置番茄钟的构造函数
-    //public TimeAmount(int minutes, Boolean flag)
-    //public TimeAmount(int minutes, Pomodoro pomodoro)
 }

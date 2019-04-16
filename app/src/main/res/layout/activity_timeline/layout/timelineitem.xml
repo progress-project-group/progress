@@ -44,29 +44,57 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp"
-            >
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="content"
-                android:id="@+id/start_time"
-                android:typeface="monospace"
-                android:textColor="@color/gray"
-                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
+                >
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="content"
+                    android:id="@+id/start_time"
+                    android:typeface="monospace"
+                    android:textColor="@color/gray"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below = "@id/matter_content"
+                    android:textColor="#000000"
+                    android:text="start time"
+                    android:id="@+id/matter_content"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below = "@id/matter_content"
-                android:textColor="#000000"
-                android:text="start time"
-                android:id="@+id/matter_content"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/timeLineItem_setting_button"
+                    android:background="@drawable/clock_button"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/timeLineItem_delete_button"
+                    android:background="@drawable/delete_button"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

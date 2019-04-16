@@ -10,4 +10,10 @@
         android:text="@string/TimeLineTest"
         android:id="@+id/TimeLineTestButton"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EventList"
+        android:id="@+id/EventListTestButton"/>
+
 </LinearLayout>

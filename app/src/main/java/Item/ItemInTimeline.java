@@ -12,12 +12,8 @@ import Item.Time.TimeAmount;
 
 public class ItemInTimeline extends Item {
     private MyTime startTime;
-    private MyTime endTime;
     private int timePointImageId;
 
-    public void setEndTime(MyTime endTime) {
-        this.endTime = endTime;
-    }
 
     public int getTimePointImageId() {
 
@@ -28,7 +24,7 @@ public class ItemInTimeline extends Item {
         this.timePointImageId = timePointImageId;
     }
 
-    public static ItemInTimeline getFreeItem(ItemInTimeline item1, ItemInTimeline item2){
+    /*public static ItemInTimeline getFreeItem(ItemInTimeline item1, ItemInTimeline item2){
         TimeAmount gap = MyTime.getGap(item2.startTime, item1.endTime);
         if(gap.getMinutes()!=0) {
             ItemInTimeline freeItem = new ItemInTimeline("free", item1.endTime, gap);
@@ -37,7 +33,7 @@ public class ItemInTimeline extends Item {
         }else{
             return null;
         }
-    }
+    }*/
 
     public void setStartTime(MyTime startTime) {
         this.startTime = startTime;
@@ -48,13 +44,9 @@ public class ItemInTimeline extends Item {
         return startTime.toString();
     }
 
-    public ItemInTimeline(String content, MyTime startTime, TimeAmount timeAmount){
-        super(content,timeAmount);
+    public ItemInTimeline(String content, MyTime startTime){
+        super(content);
         this.startTime = startTime;
         timePointImageId = R.drawable.blue_time_point;
-        if(timeAmount.getMinutes()==0){
-            timePointImageId = R.drawable.yellow_time_point;
-        }
-        endTime = MyTime.add(startTime,timeAmount);
     }
 }

@@ -18,12 +18,23 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"onCreate");
         setContentView(R.layout.activity_main);
         Log.d(TAG,"setContentView");
+
         Button TimeLineTestButton = (Button) findViewById(R.id.TimeLineTestButton);
         TimeLineTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,TimelineActivity.class);
-                Log.d(TAG,"startActivity");
+                Log.d(TAG,"startTimeLineActivity");
+                startActivity(intent);
+            }
+        });
+
+        Button EventListTestButton = (Button) findViewById(R.id.EventListTestButton);
+        EventListTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,EventListActivity.class);
+                Log.d(TAG,"startEventListActivity");
                 startActivity(intent);
             }
         });
