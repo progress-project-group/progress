@@ -15,7 +15,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String EVENTLIST_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.EventListData.TABLE_NAME + " (" +
             FeedReaderContract.EventListData._ID + " INTEGER PRIMARY KEY," +
             FeedReaderContract.EventListData.COLUMN_CONTENT + " TEXT," +
-            FeedReaderContract.EventListData.COLUMN_TIMEAMOUNT + " INTEGER)";
+            FeedReaderContract.EventListData.COLUMN_PORNUMS + " INTEGER," +
+            FeedReaderContract.EventListData.COLUMN_WORK + " INTEGER," +
+            FeedReaderContract.EventListData.COLUMN_RELAX + " INTEGER)";
     private static final String Time_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.Time.TABLE_NAME + "(" +
             FeedReaderContract.Time._ID + "INITEGER PRIMARY KEY," +
             FeedReaderContract.Time.COLUMN_TIME + " TEXT)";

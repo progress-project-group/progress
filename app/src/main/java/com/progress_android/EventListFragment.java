@@ -21,6 +21,7 @@ import DataBase.DataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Item.EventItem;
+import Item.Time.Pomodoro;
 import Item.Time.TimeAmount;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -105,9 +106,11 @@ public class EventListFragment extends Fragment{
 
         while(cursor.moveToNext()) {
             String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_CONTENT));
-            int mins = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_TIMEAMOUNT));
+            int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_PORNUMS));
+            int work = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_WORK));
+            int relax = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_RELAX));
 
-            EventItem item = new EventItem(content, new TimeAmount(mins));
+            EventItem item = new EventItem(content, new TimeAmount(new Pomodoro(work,relax), porNums));
             eventList.add(item);
         }
     }
@@ -126,7 +129,9 @@ public class EventListFragment extends Fragment{
             EventItem item = eventList.get(i);
             ContentValues values = new ContentValues();
             values.put(FeedReaderContract.EventListData.COLUMN_CONTENT,item.getContent());
-            values.put(FeedReaderContract.EventListData.COLUMN_TIMEAMOUNT,item.getTimeAmount().getMinutes());
+            values.put(FeedReaderContract.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
+            values.put(FeedReaderContract.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
+            values.put(FeedReaderContract.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
 
             db.insert(FeedReaderContract.EventListData.TABLE_NAME, null,values);
         }

@@ -19,7 +19,9 @@ public class FeedReaderContract {
 
     public static class EventListData implements BaseColumns{
         public static final String TABLE_NAME = "EventListData";
-        public static final String COLUMN_TIMEAMOUNT = "TimeAmount";
+        public static final String COLUMN_PORNUMS = "PorNums";
+        public static final String COLUMN_WORK = "Work";
+        public static final String COLUMN_RELAX = "Relax";
         public static final String COLUMN_CONTENT = "Content";
     }
 }
