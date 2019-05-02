@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,16 @@ public class AddEventDialogFragment extends DialogFragment {
     String TAG = "AddEventDialogFragment";
     private Dialog dialog;
 
+    public int getAddItemTag() {
+        return addItemTag;
+    }
+
+    private int addItemTag;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        addItemTag = getArguments().getInt("AddItemTag");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -38,13 +46,14 @@ public class AddEventDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.d(TAG,eventContent.getText().toString());
-                        if(eventContent.getText().toString().equals("")){
+                        if(TextUtils.isEmpty(eventContent.getText())){
                             Log.d(TAG, "内容为空");
                             eventContent.setHint("内容不可为空！");
                             eventContent.setHintTextColor(getResources().getColor(R.color.red));
+
                         } else {
                             setCancelable(true);
-                            listener.onDialogPositiveClick(AddEventDialogFragment.this);
+                            listener.onDialogPositiveClick_add(AddEventDialogFragment.this);
                         }
                     }
                 })
@@ -61,8 +70,8 @@ public class AddEventDialogFragment extends DialogFragment {
     }
 
     public interface NoticeDialogListener{
-        public void onDialogPositiveClick(AddEventDialogFragment dialog);
-        public void onDialogNegativeClick(AddEventDialogFragment dialog);
+        public void onDialogPositiveClick_add(AddEventDialogFragment dialog);
+        public void onDialogNegativeClick_add(AddEventDialogFragment dialog);
     }
 
     NoticeDialogListener listener;

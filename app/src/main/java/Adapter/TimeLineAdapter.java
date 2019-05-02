@@ -1,17 +1,20 @@
 package Adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.progress_android.R;
-import Dialog.startTimeSettingDialog;
+import Dialog.StartTimeSettingDialog;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView matterContent;
+        EditText matterContent;
         TextView startTime;
         ImageView timePointImage;
         View timeAmount;
@@ -40,7 +43,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
         public ViewHolder(View view){
             super(view);
-            matterContent = (TextView) view.findViewById(R.id.matter_content);
+            matterContent = (EditText) view.findViewById(R.id.matter_content);
             startTime = (TextView) view.findViewById(R.id.start_time);
             timePointImage = (ImageView) view.findViewById(R.id.time_point_image);
             timeAmount = (View) view.findViewById(R.id.time_amount);
@@ -75,16 +78,39 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         holder.timeLineItemSettingButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startTimeSettingDialog newFragment = new startTimeSettingDialog();
+                StartTimeSettingDialog newFragment = new StartTimeSettingDialog();
                 newFragment.position = holder.getAdapterPosition();
                 newFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "startTimePicker");
             }
         });
+
+        holder.matterContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int position = holder.getAdapterPosition();
+                ItemInTimeline eventItem = mItemInTimelineList.get(position);
+                eventItem.setContent(s.toString());
+            }
+        });
+
         Log.d(TAG,"construct ViewHolder");
         return holder;
     }
 
-
+    public void addItem(int position, ItemInTimeline item){
+        mItemInTimelineList.add(position,item);
+        notifyItemInserted(position);
+    }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -126,7 +152,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     }
 
     public void updateItem(MyTime myTime, int position){
-        mItemInTimelineList.get(position).setStartTime(myTime);
-        notifyItemChanged(position);
+        ItemInTimeline item = mItemInTimelineList.get(position);
+        item.setStartTime(myTime);
+        mItemInTimelineList.remove(position);
+        int i = 0;
+        while(item.later(mItemInTimelineList.get(i))){
+            ++i;
+        }
+        mItemInTimelineList.add(i,item);
+        notifyDataSetChanged();
     }
 }

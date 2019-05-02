@@ -163,8 +163,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.eventitem,parent,false);
         final ViewHolder holder = new ViewHolder(view);
 
-        setTextWatch(holder.eventContent, holder.getAdapterPosition());
-
         holder.delete_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -182,6 +180,26 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 showTomatoSettingDialog(holder.getAdapterPosition());
             }
         });
+
+        holder.eventContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int position = holder.getAdapterPosition();
+                EventItem eventItem = eventList.get(position);
+                eventItem.setContent(s.toString());
+            }
+        });
+
         return holder;
     }
 
@@ -189,7 +207,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventItem eventItem = eventList.get(position);
 
-        holder.eventContent.setText(eventItem.getContent().toString());
+        holder.eventContent.setText(eventItem.getContent());
         if(eventItem.getTimeAmount()==null) {
             holder.eventPriority.setText(" " + position);
         }else{
@@ -314,23 +332,4 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         return new TimeAmount(new Pomodoro(workingTime,relaxingTime), num);
     }
 
-    private void setTextWatch(final EditText eventContent, final int position){
-        TextWatcher watcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                EventItem eventItem = eventList.get(position);
-                eventItem.setContent(s.toString());
-            }
-        };
-    }
 }

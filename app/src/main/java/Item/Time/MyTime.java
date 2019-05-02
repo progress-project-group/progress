@@ -47,4 +47,12 @@ public class MyTime {
         }
         return hours + ":" + mins;
     }
+
+    public boolean later(MyTime time){
+        if(this.hours == time.hours){
+            return this.mins > time.mins;
+        }
+        return this.hours > time.hours;
+    }
+
 }

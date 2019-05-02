@@ -62,13 +62,13 @@ public class EventListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(AddEventDialogFragment dialog) {
+    public void onDialogPositiveClick_add(AddEventDialogFragment dialog) {
         EventItem addedItem = new EventItem(dialog.eventContent.getText().toString());
         adapter.addEvent(eventList.size(),addedItem);
     }
 
     @Override
-    public void onDialogNegativeClick(AddEventDialogFragment dialog) { }
+    public void onDialogNegativeClick_add(AddEventDialogFragment dialog) { }
 
     private void showAddEventDialog(){
         DialogFragment dialog = new AddEventDialogFragment();

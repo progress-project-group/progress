@@ -59,18 +59,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="content"
                     android:id="@+id/start_time"
                     android:typeface="monospace"
                     android:textColor="@color/gray"
                     />
 
-                <TextView
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below = "@id/matter_content"
                     android:textColor="#000000"
-                    android:text="start time"
                     android:id="@+id/matter_content"
                     android:layout_marginTop="10dp"/>
             </LinearLayout>

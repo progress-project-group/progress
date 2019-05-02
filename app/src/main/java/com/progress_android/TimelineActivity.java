@@ -1,7 +1,7 @@
 package com.progress_android;
 
 import Adapter.TimeLineAdapter;
-import Dialog.startTimeSettingDialog;
+import Dialog.StartTimeSettingDialog;
 import Item.ItemInTimeline;
 import Item.Time.MyTime;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity implements startTimeSettingDialog.NoticeDialogListener{
+public class TimelineActivity extends AppCompatActivity implements StartTimeSettingDialog.NoticeDialogListener{
 
     String TAG = "TimelineActivity";
     private RecyclerView recyclerView;
@@ -64,11 +64,11 @@ public class TimelineActivity extends AppCompatActivity implements startTimeSett
     }
 
     @Override
-    public void onDialogPositiveClick(int hour, int minute, int position) {
+    public void onDialogPositiveClick_start(int hour, int minute, int position) {
         MyTime myTime = new MyTime(hour, minute);
         mAdapter.updateItem(myTime, position);
     }
 
     @Override
-    public void onDialogNegativeClick(int hour, int minute, int position) {}
+    public void onDialogNegativeClick_start(int hour, int minute, int position) {}
 }

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class startTimeSettingDialog extends DialogFragment
+public class StartTimeSettingDialog extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
     public int position;
@@ -32,12 +32,12 @@ public class startTimeSettingDialog extends DialogFragment
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        listener.onDialogPositiveClick(hourOfDay, minute, position);
+        listener.onDialogPositiveClick_start(hourOfDay, minute, position);
     }
 
     public interface NoticeDialogListener{
-        public void onDialogPositiveClick(int hour, int minute, int position);
-        public void onDialogNegativeClick(int hour, int minute, int position);
+        public void onDialogPositiveClick_start(int hour, int minute, int position);
+        public void onDialogNegativeClick_start(int hour, int minute, int position);
     }
 
     NoticeDialogListener listener;
