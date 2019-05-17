@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.progress_android.R;
@@ -152,14 +154,26 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     }
 
     public void updateItem(MyTime myTime, int position){
+        Log.d(TAG,"updateItem");
+        for(int i=0; i<mItemInTimelineList.size(); ++i){
+            //Log.d(TAG, "StartTime: " + mItemInTimelineList.get(i).getStartTime())
+            if(mItemInTimelineList.get(i).getStartTime().equals(myTime.toString())){
+                Toast.makeText(context, "该时间点已有事件", Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Item startTime collide");
+                return;
+            }
+        }
         ItemInTimeline item = mItemInTimelineList.get(position);
-        item.setStartTime(myTime);
         mItemInTimelineList.remove(position);
+
+        notifyItemRemoved(position);
+        item.setStartTime(myTime);
         int i = 0;
         while(item.later(mItemInTimelineList.get(i))){
             ++i;
         }
         mItemInTimelineList.add(i,item);
-        notifyDataSetChanged();
+        //notifyItemMoved(position,i);
+        notifyItemInserted(i);
     }
 }

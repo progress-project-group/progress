@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,7 +28,9 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DailyPlanActivity extends AppCompatActivity implements AddEventDialogFragment.NoticeDialogListener
@@ -36,6 +39,9 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
     DailyPlanPagerAdapter dailyPlanPagerAdapter;
     ViewPager viewPager;
     static final int NUM_ITEMS = 2;
+    public static final int TODAY = 1;
+    public static final int TOMORROW = 2;
+    int planID;
     List<String> pageTitleList = new ArrayList<>();
     List<Fragment> fragmentList = new ArrayList<>();
     EventListFragment eventListFragment;
@@ -48,6 +54,8 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_plan);
+        Intent intent = getIntent();
+        planID = intent.getIntExtra("PLANID", 1);
         initList();
         ((ViewPager.LayoutParams) findViewById(R.id.pager_header).getLayoutParams()).isDecor = true;
         dailyPlanPagerAdapter = new DailyPlanPagerAdapter(getSupportFragmentManager());
@@ -81,6 +89,12 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
 
         ContentValues values = new ContentValues();
         Date dCurrentDate = new Date();
+        if(planID==TOMORROW){
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(dCurrentDate);
+            calendar.add(calendar.DATE,1);
+            dCurrentDate = calendar.getTime();
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String sCurrentDate = sdf.format(dCurrentDate);
         values.put("Date", sCurrentDate);
@@ -121,6 +135,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
     @Override
     public void onDialogPositiveClick_start(int hour, int minute, int position) {
         MyTime myTime = new MyTime(hour, minute);
+
         timeLineFragment.updateItem(myTime, position);
     }
 

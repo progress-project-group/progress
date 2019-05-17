@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.progress_android.DailyPlanActivity.TODAY;
+
 public class MainActivity extends AppCompatActivity {
     String TAG = "main_activity";
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
                 Log.d(TAG,"startFragmentTestActivity");
+                intent.putExtra("PLANID", TODAY);
                 startActivity(intent);
             }
         });

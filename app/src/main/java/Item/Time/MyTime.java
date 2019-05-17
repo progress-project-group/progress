@@ -55,4 +55,7 @@ public class MyTime {
         return this.hours > time.hours;
     }
 
+    public boolean equals(MyTime time){
+        return this.hours==time.hours&&this.mins==time.mins;
+    }
 }

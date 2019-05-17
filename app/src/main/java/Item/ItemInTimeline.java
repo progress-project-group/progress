@@ -55,6 +55,8 @@ public class ItemInTimeline extends Item {
         return this.startTime.later(item.startTime);
     }
 
+    public boolean equals(ItemInTimeline item) {return this.startTime.equals(item.startTime);}
+
     public ItemInTimeline(String content, MyTime startTime){
         super(content);
         this.startTime = startTime;
