@@ -1,4 +1,4 @@
-package com.progress_android.fragment_dailyPlan;
+package com.progress_android;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,14 +12,12 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
-import com.progress_android.DailyPlanActivity;
-import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.EventListAdapter;
-import DataBase.DailyPlanDataBaseHelper;
+import DataBase.DataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Item.DaliyPlan.EventItem;
@@ -81,7 +79,7 @@ public class EventListFragment extends Fragment{
     private void showAddEventDialog(){
         DialogFragment dialog = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("FragmentTag", DailyPlanActivity.FragmentTag_EventList);
+        bundle.putInt("AddItemTag",2);
         dialog.setArguments(bundle);
         dialog.setCancelable(false);
         dialog.show(getChildFragmentManager(), "AddEventDialogFragment");
@@ -93,7 +91,7 @@ public class EventListFragment extends Fragment{
 
     public void initEventList(Context context){
         Log.d(TAG,"initEventList");
-        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
+        DataBaseHelper dbHelper = new DataBaseHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(
@@ -113,7 +111,7 @@ public class EventListFragment extends Fragment{
             int work = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_WORK));
             int relax = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_RELAX));
 
-            EventItem item = new EventItem( content,new TimeAmount(new Pomodoro(work, relax), porNums), type);
+            EventItem item = new EventItem(content, new TimeAmount(new Pomodoro(work,relax), porNums), type);
             eventList.add(item);
         }
     }
@@ -136,7 +134,7 @@ public class EventListFragment extends Fragment{
             values.put(FeedReaderContract.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
             values.put(FeedReaderContract.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
             values.put(FeedReaderContract.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
-            Log.d(TAG, "saveData" + values);
+
             db.insert(FeedReaderContract.EventListData.TABLE_NAME, null,values);
         }
     }
@@ -153,9 +151,5 @@ public class EventListFragment extends Fragment{
         eventList.add(item1); eventList.add(item2); eventList.add(item3);
         eventList.add(item4); eventList.add(item5); eventList.add(item6);
         eventList.add(item7);
-    }
-
-    public void setItemType(int position, int type){
-        adapter.setItemType(position, type);
     }
 }

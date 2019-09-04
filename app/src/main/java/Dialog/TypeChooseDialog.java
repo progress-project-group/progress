@@ -11,10 +11,6 @@ import android.widget.RadioGroup;
 
 import com.progress_android.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Item.Item;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -25,7 +21,6 @@ public class TypeChooseDialog extends DialogFragment {
     public RadioButton sportChoose_button;
     public RadioButton relaxChoose_button;
     public RadioButton otherChoose_button;
-    public List<RadioButton> typeChooseButton = new ArrayList<>();
     public RadioGroup typeGroup;
     private Dialog dialog;
     public int position;
@@ -38,56 +33,44 @@ public class TypeChooseDialog extends DialogFragment {
         try{
             listener = (TypeChooseListener) context;
         }catch (ClassCastException e){
-            throw new ClassCastException(getActivity().toString()+" must implement TypeChooseListener");
+            throw new ClassCastException(getActivity().toString()+" must implement NoticeDialogListener");
         }
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog (@Nullable Bundle savedInstanceState) {
-        fragmentTag = getArguments().getInt("FragmentTag");
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         position = getArguments().getInt("POSITION");
         checkedItem = getArguments().getInt("TYPE");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View DialogView = inflater.inflate(R.layout.type_choose_dialog, null);
-        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.study_button));
-        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.sport_button));
-        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.relax_button));
-        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.other_button));
 
-        if(checkedItem < Item.typeNum) {
-            typeChooseButton.get(checkedItem).setChecked(true);
+        studyChoose_button = DialogView.findViewById(R.id.study_button);
+        sportChoose_button = DialogView.findViewById(R.id.sport_button);
+        relaxChoose_button = DialogView.findViewById(R.id.relax_button);
+        otherChoose_button = DialogView.findViewById(R.id.other_button);
+        switch(checkedItem){
+            case R.id.study_button: studyChoose_button.setChecked(true); break;
+            case R.id.sport_button: sportChoose_button.setChecked(true); break;
+            case R.id.relax_button: relaxChoose_button.setChecked(true); break;
+            case R.id.other_button: otherChoose_button.setChecked(true); break;
+
         }
-
         typeGroup = DialogView.findViewById(R.id.type_group);
-        typeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch(checkedId){
-                    case R.id.study_button: 
-                        checkedItem = Item.STUDY;
-                        break;
-                    case R.id.sport_button:
-                        checkedItem = Item.SPORT;
-                        break;
-                    case R.id.relax_button:
-                        checkedItem = Item.RELAX;
-                        break;
-                    case R.id.other_button:
-                        checkedItem = Item.OTHER;
-                        break;
-                }
-                dialog.setTitle(Item.typeName[checkedItem]);
-            }
-        });
         dialog = builder.setView(DialogView)
-                .setTitle("选择种类:")
+                .setTitle("选择种类")
                 .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogPositiveClick_type(TypeChooseDialog.this);
+                        switch(typeGroup.getCheckedRadioButtonId()){
+                            case R.id.study_button: break;
+                            case R.id.sport_button: break;
+                            case R.id.relax_button: break;
+                            case R.id.other_button: break;
+
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -101,15 +84,9 @@ public class TypeChooseDialog extends DialogFragment {
     }
 
     public interface TypeChooseListener{
-        public void onDialogPositiveClick_type(TypeChooseDialog dialog);
-        public void onDialogNegativeClick_type(TypeChooseDialog dialog);
+        public void onDialogPositiveClick_type(AddEventDialogFragment dialog);
+        public void onDialogNegativeClick_type(AddEventDialogFragment dialog);
     }
 
     TypeChooseListener listener;
-
-    public int getFragmentTag() {
-        return fragmentTag;
-    }
-
-    private int fragmentTag;
 }
