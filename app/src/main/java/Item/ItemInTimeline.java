@@ -62,4 +62,10 @@ public class ItemInTimeline extends Item {
         this.startTime = startTime;
         timePointImageId = R.drawable.blue_time_point;
     }
+
+    public ItemInTimeline(String content, MyTime startTime, int type){
+        super(content,type);
+        this.startTime = startTime;
+        timePointImageId = R.drawable.blue_time_point;
+    }
 }

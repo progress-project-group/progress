@@ -4,6 +4,7 @@ import DataBase.DataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Dialog.StartTimeSettingDialog;
+import Dialog.TypeChooseDialog;
 import Item.EventItem;
 import Item.ItemInTimeline;
 import Item.Time.MyTime;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerTitleStrip;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.ContentValues;
@@ -22,6 +24,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -34,7 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DailyPlanActivity extends AppCompatActivity implements AddEventDialogFragment.NoticeDialogListener
-            , StartTimeSettingDialog.NoticeDialogListener {
+            , StartTimeSettingDialog.NoticeDialogListener, TypeChooseDialog.TypeChooseListener {
 
     DailyPlanPagerAdapter dailyPlanPagerAdapter;
     ViewPager viewPager;
@@ -57,7 +60,9 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
         Intent intent = getIntent();
         planID = intent.getIntExtra("PLANID", 1);
         initList();
-        ((ViewPager.LayoutParams) findViewById(R.id.pager_header).getLayoutParams()).isDecor = true;
+        PagerTitleStrip titleStrip = (PagerTitleStrip) findViewById(R.id.pager_header);
+        titleStrip.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        ((ViewPager.LayoutParams) titleStrip.getLayoutParams()).isDecor = true;
         dailyPlanPagerAdapter = new DailyPlanPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.daily_plan_pager);
         viewPager.setAdapter(dailyPlanPagerAdapter);
@@ -131,6 +136,20 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
 
     @Override
     public void onDialogNegativeClick_add(AddEventDialogFragment dialog) { }
+
+    @Override
+    public void onDialogPositiveClick_type(AddEventDialogFragment dialog) {
+        if(dialog.getAddItemTag()==addItemTag_EventList) {
+            EventItem addedItem = new EventItem(dialog.eventContent.getText().toString());
+            eventListFragment.addEventItem(addedItem);
+        } else{
+            ItemInTimeline addedItem = new ItemInTimeline(dialog.eventContent.getText().toString(),new MyTime(0,0));
+            timeLineFragment.addItem(addedItem);
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick_type(AddEventDialogFragment dialog) { }
 
     @Override
     public void onDialogPositiveClick_start(int hour, int minute, int position) {

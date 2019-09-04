@@ -110,10 +110,11 @@ public class TimeLineFragment extends Fragment {
 
         while(cursor.moveToNext()) {
             String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_CONTENT));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_TYPE));
             int hour = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_HOUR));
             int mins = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_MINS));
 
-            ItemInTimeline item = new ItemInTimeline(content, new MyTime(hour, mins));
+            ItemInTimeline item = new ItemInTimeline(content, new MyTime(hour, mins), type);
             itemList.add(item);
         }
     }
@@ -132,6 +133,7 @@ public class TimeLineFragment extends Fragment {
             ItemInTimeline item = itemList.get(i);
             ContentValues values = new ContentValues();
             values.put(FeedReaderContract.TimeLineData.COLUMN_CONTENT,item.getContent());
+            values.put(FeedReaderContract.TimeLineData.COLUMN_TYPE, item.getVariety());
             values.put(FeedReaderContract.TimeLineData.COLUMN_HOUR,item.getStartTimeHour());
             values.put(FeedReaderContract.TimeLineData.COLUMN_MINS,item.getStartTimeMins());
 

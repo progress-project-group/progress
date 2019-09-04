@@ -1,11 +1,15 @@
 package Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,6 +43,7 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeabl
 import com.progress_android.R;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,15 +52,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Dialog.TypeChooseDialog;
 import Item.EventItem;
 import Item.Time.Pomodoro;
 import Item.Time.TimeAmount;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder>
-        implements DraggableItemAdapter<EventListAdapter.ViewHolder>{
+        implements DraggableItemAdapter<EventListAdapter.ViewHolder>,
+                    SwipeableItemAdapter<EventListAdapter.ViewHolder>{
 
     private List<EventItem> eventList;
     private String TAG = "EventListAdapter";
@@ -130,10 +139,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
 
     //SwipeFunction
-    /*
+
     @Override
     public int onGetSwipeReactionType(@NonNull ViewHolder holder, int position, int x, int y) {
-        return SwipeableItemConstants.REACTION_CAN_SWIPE_RIGHT;
+        return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
     }
 
     @Override
@@ -153,7 +162,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         }else{
             return new SwipeResultActionDoNothing();
         }
-    }*/
+    }
 
 
     //ViewHolder
@@ -162,6 +171,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.eventitem,parent,false);
         final ViewHolder holder = new ViewHolder(view);
+
+        holder.type_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                showTypeChooseDialog(holder.getAdapterPosition(), eventList.get(holder.getAdapterPosition()).getVariety());
+            }
+        });
 
         holder.delete_button.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -208,6 +224,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         EventItem eventItem = eventList.get(position);
 
         holder.eventContent.setText(eventItem.getContent());
+
         if(eventItem.getTimeAmount()==null) {
             holder.eventPriority.setText(" " + position);
         }else{
@@ -219,21 +236,23 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
 
-    static class ViewHolder extends AbstractDraggableItemViewHolder {
+    static class ViewHolder extends AbstractDraggableSwipeableItemViewHolder {
         public EditText eventContent;
         public TextView eventPriority;
         public View dragHandle;
+        public Button type_button;
         public Button delete_button;
         public Button tomato_button;
         public ImageView[] tomato = new ImageView[6];
 
-        //public FrameLayout containerView;
+        public FrameLayout containerView;
 
         public ViewHolder(View view){
             super(view);
             eventContent = (EditText) view.findViewById(R.id.event_content);
             eventPriority = (TextView) view.findViewById(R.id.event_priority);
             dragHandle = (View) view.findViewById(R.id.drag_handle);
+            type_button = (Button) view.findViewById(R.id.event_type_button);
             delete_button = (Button) view.findViewById(R.id.event_delete_button);
             tomato_button = (Button) view.findViewById(R.id.event_tomato_button);
             tomato[0] = (ImageView) view.findViewById(R.id.tomato1);
@@ -243,14 +262,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tomato[4] = (ImageView) view.findViewById(R.id.tomato5);
             tomato[5] = (ImageView) view.findViewById(R.id.tomato6);
 
-            //containerView = (FrameLayout) view.findViewById(R.id.container);
+            containerView = (FrameLayout) view.findViewById(R.id.container);
         }
 
-        /*@NonNull
+        @NonNull
         @Override
         public View getSwipeableContainerView() {
             return containerView;
-        }*/
+        }
     }
 
     @Override
@@ -261,6 +280,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void addEvent(int position, EventItem eventItem){
         eventList.add(position,eventItem);
         notifyItemInserted(position);
+    }
+
+    private void showTypeChooseDialog(int position, int type){
+        TypeChooseDialog dialog = new TypeChooseDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt("POSITION",position);
+        bundle.putInt("TYPE", type);
+        dialog.setArguments(bundle);
+        dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TypeChoose of EventList");
     }
 
     private void showTomatoSettingDialog(final int position){

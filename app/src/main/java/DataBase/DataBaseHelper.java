@@ -10,11 +10,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TIMELINE_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.TimeLineData.TABLE_NAME + " (" +
             FeedReaderContract.TimeLineData._ID + " INTEGER PRIMARY KEY," +
             FeedReaderContract.TimeLineData.COLUMN_CONTENT + " TEXT," +
+            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
             FeedReaderContract.TimeLineData.COLUMN_HOUR + " INTEGER,"+
             FeedReaderContract.TimeLineData.COLUMN_MINS + " INTEGER)";
     private static final String EVENTLIST_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.EventListData.TABLE_NAME + " (" +
             FeedReaderContract.EventListData._ID + " INTEGER PRIMARY KEY," +
             FeedReaderContract.EventListData.COLUMN_CONTENT + " TEXT," +
+            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
             FeedReaderContract.EventListData.COLUMN_PORNUMS + " INTEGER," +
             FeedReaderContract.EventListData.COLUMN_WORK + " INTEGER," +
             FeedReaderContract.EventListData.COLUMN_RELAX + " INTEGER)";

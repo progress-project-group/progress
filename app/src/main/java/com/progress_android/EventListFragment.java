@@ -106,11 +106,12 @@ public class EventListFragment extends Fragment{
 
         while(cursor.moveToNext()) {
             String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_CONTENT));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_TYPE));
             int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_PORNUMS));
             int work = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_WORK));
             int relax = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_RELAX));
 
-            EventItem item = new EventItem(content, new TimeAmount(new Pomodoro(work,relax), porNums));
+            EventItem item = new EventItem(content, new TimeAmount(new Pomodoro(work,relax), porNums), type);
             eventList.add(item);
         }
     }
@@ -129,6 +130,7 @@ public class EventListFragment extends Fragment{
             EventItem item = eventList.get(i);
             ContentValues values = new ContentValues();
             values.put(FeedReaderContract.EventListData.COLUMN_CONTENT,item.getContent());
+            values.put(FeedReaderContract.EventListData.COLUMN_TYPE, item.getVariety());
             values.put(FeedReaderContract.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
             values.put(FeedReaderContract.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
             values.put(FeedReaderContract.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
