@@ -11,6 +11,6 @@ public class MonthlyPlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_plan);
+        setContentView(R.layout.activity_monthly_plan);
     }
 }
