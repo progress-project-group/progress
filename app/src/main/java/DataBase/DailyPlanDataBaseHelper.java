@@ -10,20 +10,17 @@ public class DailyPlanDataBaseHelper extends SQLiteOpenHelper {
     private static final String TIMELINE_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.TimeLineData.TABLE_NAME + " (" +
             FeedReaderContract.TimeLineData._ID + " INTEGER PRIMARY KEY," +
             FeedReaderContract.TimeLineData.COLUMN_CONTENT + " TEXT," +
-            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
             FeedReaderContract.TimeLineData.COLUMN_HOUR + " INTEGER,"+
             FeedReaderContract.TimeLineData.COLUMN_MINS + " INTEGER)";
     private static final String EVENTLIST_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.EventListData.TABLE_NAME + " (" +
             FeedReaderContract.EventListData._ID + " INTEGER PRIMARY KEY," +
             FeedReaderContract.EventListData.COLUMN_CONTENT + " TEXT," +
-            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
             FeedReaderContract.EventListData.COLUMN_PORNUMS + " INTEGER," +
             FeedReaderContract.EventListData.COLUMN_WORK + " INTEGER," +
             FeedReaderContract.EventListData.COLUMN_RELAX + " INTEGER)";
     private static final String Time_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.Time.TABLE_NAME + "(" +
             FeedReaderContract.Time._ID + "INITEGER PRIMARY KEY," +
             FeedReaderContract.Time.COLUMN_TIME + " TEXT)";
-
 
     public DailyPlanDataBaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
