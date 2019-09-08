@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class MainActivity extends AppCompatActivity {
     String TAG = "main_activity";
 
@@ -45,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
                 Log.d(TAG,"startFragmentTestActivity");
+                startActivity(intent);
+            }
+        });
+
+        Button LongTermTestButton = (Button) findViewById(R.id.LongTermScheduleTestButton);
+        LongTermTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,LongTermScheduleListActivity.class);
                 startActivity(intent);
             }
         });

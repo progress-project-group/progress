@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.progress_android">
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".LongTermSchedulePagerActivity" android:parentActivityName=".LongTermScheduleListActivity"></activity>
+        <activity android:name=".LongTermScheduleListActivity" android:parentActivityName=".MainActivity" />
         <activity android:name=".DailyPlanActivity" />
         <activity android:name=".EventListActivity" />
         <activity android:name=".TimelineActivity" />
@@ -27,5 +25,9 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

@@ -1,6 +1,6 @@
 package com.progress_android;
 
-import DataBase.DataBaseHelper;
+import DataBase.DailyPlanDataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Dialog.StartTimeSettingDialog;
@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -76,7 +75,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
 
     private void saveData(){
         Log.d(TAG,"saveData");
-        DataBaseHelper dbHelper = new DataBaseHelper(this);
+        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -152,7 +151,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
 
     private void initList(){
         Log.d(TAG,"initList");
-        DataBaseHelper dbHelper = new DataBaseHelper(this);
+        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         pageTitleList.add("清单");

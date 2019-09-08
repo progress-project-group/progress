@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="longTermTitle">长期目标</string>
+    <string name="longTermTitleHint">请输入长期目标名称</string>
+    <string name="longTermBeginDate">目标开始时间</string>
+    <string name="newLongTermSchedule">增加长期目标</string>
+    <string name="subLongTermScheduleDialog">子任务</string>
+    <string name="subLongTernScheduleOK">确认</string>
+    <string name="subLongTermScheduleDelete">删除子任务</string>
+    <string name="subLongTermScheduleTitle">子任务名</string>
+    <string name="subLongTernScheduleTitleHint">请输入子任务名</string>
+    <string name="subLongTernSchedulePercent">任务占比</string>
+    <string name="subLongTernScheduleFinished">已完成</string>
+    <string name="newSubLongTermSchedule">创建新的子目标</string>
+
+
+</resources>

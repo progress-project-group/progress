@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.EventListAdapter;
-import DataBase.DataBaseHelper;
+import DataBase.DailyPlanDataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Item.EventItem;
@@ -91,7 +91,7 @@ public class EventListFragment extends Fragment{
 
     public void initEventList(Context context){
         Log.d(TAG,"initEventList");
-        DataBaseHelper dbHelper = new DataBaseHelper(context);
+        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(

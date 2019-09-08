@@ -45,4 +45,11 @@ dependencies {
     implementation 'com.google.android.material:material:+'
     implementation 'com.contrarywind:Android-PickerView:4.1.7'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+
+
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
 }
