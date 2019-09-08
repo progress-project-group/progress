@@ -48,5 +48,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //月计划
+        Button MonthlyPlanTestButton = (Button) findViewById(R.id.MonthlyPlanTestButton);
+        FragmentTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
