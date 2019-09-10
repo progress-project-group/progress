@@ -15,6 +15,7 @@ public class FeedReaderContract {
         public static final String COLUMN_HOUR = "StartTimeHOUR";
         public static final String COLUMN_MINS = "StartTimeMINS";
         public static final String COLUMN_CONTENT = "Content";
+        public static final String COLUMN_TYPE = "Type";
     }
 
     public static class EventListData implements BaseColumns{
@@ -23,5 +24,6 @@ public class FeedReaderContract {
         public static final String COLUMN_WORK = "Work";
         public static final String COLUMN_RELAX = "Relax";
         public static final String COLUMN_CONTENT = "Content";
+        public static final String COLUMN_TYPE = "Type";
     }
 }

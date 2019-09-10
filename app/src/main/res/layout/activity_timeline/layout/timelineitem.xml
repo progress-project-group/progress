@@ -81,6 +81,13 @@
                 <Button
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:id="@+id/timeLineItem_typeChoose_button"
+                    android:background="@drawable/type_button"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/timeLineItem_setting_button"
                     android:background="@drawable/clock_button"
                     android:layout_gravity="center"/>

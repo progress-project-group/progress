@@ -3,12 +3,8 @@ package Item;
 import Item.Time.TimeAmount;
 
 public class EventItem extends Item{
-    public enum varieties{
-        xuexi, duanlian, dushu, yule
-    }
-
     private TimeAmount timeAmount;
-    varieties variety;
+
     public int id;
     static int idnum = 0;
 
@@ -22,7 +18,6 @@ public class EventItem extends Item{
 
     public EventItem(String content){
         super(content);
-        variety = null;
         timeAmount = null;
         id = idnum;
         ++idnum;
@@ -32,23 +27,13 @@ public class EventItem extends Item{
         super(content);
         id = idnum;
         ++idnum;
-        this.variety = null;
         this.timeAmount = timeAmount;
     }
 
-    public EventItem(String content, TimeAmount timeAmount, varieties variety){
-        super(content);
+    public EventItem(String content, TimeAmount timeAmount, int variety){
+        super(content, variety);
         id = idnum;
         ++idnum;
-        this.variety = variety;
         this.timeAmount = timeAmount;
-    }
-
-    public void setVariety(varieties variety) {
-        this.variety = variety;
-    }
-
-    public varieties getVariety() {
-        return variety;
     }
 }

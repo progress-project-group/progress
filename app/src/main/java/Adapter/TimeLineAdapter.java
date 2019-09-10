@@ -1,6 +1,7 @@
 package Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,8 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Dialog.TypeChooseDialog;
+import Item.Item;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.progress_android.DailyPlanActivity;
 import com.progress_android.R;
 import Dialog.StartTimeSettingDialog;
 
@@ -42,6 +46,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         View ambTimeline;
         Button timeLineItemDeleteButton;
         Button timeLineItemSettingButton;
+        Button typeChooseButton;
 
         public ViewHolder(View view){
             super(view);
@@ -52,6 +57,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             ambTimeline = (View) view.findViewById(R.id.ambiguous_timeline);
             timeLineItemDeleteButton = (Button) view.findViewById(R.id.timeLineItem_delete_button);
             timeLineItemSettingButton = (Button) view.findViewById(R.id.timeLineItem_setting_button);
+            typeChooseButton = (Button) view.findViewById(R.id.timeLineItem_typeChoose_button);
         }
     }
 
@@ -66,14 +72,22 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timelineitem,parent,false);
         final ViewHolder holder = new ViewHolder(view);
 
+        holder.typeChooseButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                showTypeChooseDialog(holder.getAdapterPosition(), mItemInTimelineList.get(holder.getAdapterPosition()).getVariety());
+            }
+        });
+
+        Log.d(TAG, "clickable "+holder.matterContent.getText() + ":"+holder.timeLineItemDeleteButton.isClickable());
         holder.timeLineItemDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.timeLineItemDeleteButton.setClickable(false);
+                Log.d(TAG, "delete in TimeLine");
+                v.setClickable(false);
                 int position = holder.getAdapterPosition();
                 mItemInTimelineList.remove(position);
                 notifyItemRemoved(position);
-                notifyDataSetChanged();
             }
         });
 
@@ -122,6 +136,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         holder.startTime.setText(itemInTimeline.getStartTime());
         holder.timePointImage.setImageResource(imageId);
 
+        Log.d(TAG, "setType");
+        switch(itemInTimeline.getVariety()) {
+            case Item.STUDY: holder.typeChooseButton.setBackgroundResource(R.drawable.study); break;
+            case Item.SPORT: holder.typeChooseButton.setBackgroundResource(R.drawable.sport); break;
+            case Item.RELAX: holder.typeChooseButton.setBackgroundResource(R.drawable.relax); break;
+            case Item.OTHER: holder.typeChooseButton.setBackgroundResource(R.drawable.other); break;
+        }
+
         /*修改时间轴颜色、长度
         LinearLayout.LayoutParams timeAmountLayoutParams = (LinearLayout.LayoutParams) holder.timeAmount.getLayoutParams();
         timeAmountLayoutParams.height = itemInTimeline.getTimeAmount().getMinutes();
@@ -146,6 +168,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
 
 
         //holder.timeAmount.setLayoutParams(timeAmountLayoutParams);
+    }
+
+    private void showTypeChooseDialog(int position, int type){
+        TypeChooseDialog dialog = new TypeChooseDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt("FragmentTag", DailyPlanActivity.FragmentTag_TimeLine);
+        bundle.putInt("POSITION",position);
+        bundle.putInt("TYPE", type);
+        dialog.setArguments(bundle);
+        dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "TypeChoose of TimeLine");
     }
 
     @Override
@@ -175,5 +207,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         mItemInTimelineList.add(i,item);
         //notifyItemMoved(position,i);
         notifyItemInserted(i);
+    }
+    public void setItemType(int position, int type){
+        mItemInTimelineList.get(position).setVariety(type);
+        notifyItemChanged(position);
     }
 }

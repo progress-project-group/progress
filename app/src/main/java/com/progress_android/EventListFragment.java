@@ -79,7 +79,7 @@ public class EventListFragment extends Fragment{
     private void showAddEventDialog(){
         DialogFragment dialog = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("AddItemTag",2);
+        bundle.putInt("FragmentTag",DailyPlanActivity.FragmentTag_EventList);
         dialog.setArguments(bundle);
         dialog.setCancelable(false);
         dialog.show(getChildFragmentManager(), "AddEventDialogFragment");
@@ -106,11 +106,12 @@ public class EventListFragment extends Fragment{
 
         while(cursor.moveToNext()) {
             String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_CONTENT));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_TYPE));
             int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_PORNUMS));
             int work = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_WORK));
             int relax = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_RELAX));
 
-            EventItem item = new EventItem(content, new TimeAmount(new Pomodoro(work,relax), porNums));
+            EventItem item = new EventItem( content,new TimeAmount(new Pomodoro(work, relax), porNums), type);
             eventList.add(item);
         }
     }
@@ -129,10 +130,11 @@ public class EventListFragment extends Fragment{
             EventItem item = eventList.get(i);
             ContentValues values = new ContentValues();
             values.put(FeedReaderContract.EventListData.COLUMN_CONTENT,item.getContent());
+            values.put(FeedReaderContract.EventListData.COLUMN_TYPE, item.getVariety());
             values.put(FeedReaderContract.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
             values.put(FeedReaderContract.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
             values.put(FeedReaderContract.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
-
+            Log.d(TAG, "saveData" + values);
             db.insert(FeedReaderContract.EventListData.TABLE_NAME, null,values);
         }
     }
@@ -149,5 +151,9 @@ public class EventListFragment extends Fragment{
         eventList.add(item1); eventList.add(item2); eventList.add(item3);
         eventList.add(item4); eventList.add(item5); eventList.add(item6);
         eventList.add(item7);
+    }
+
+    public void setItemType(int position, int type){
+        adapter.setItemType(position, type);
     }
 }

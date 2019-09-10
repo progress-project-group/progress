@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.progress_android.R;
 
@@ -23,16 +24,16 @@ public class AddEventDialogFragment extends DialogFragment {
     String TAG = "AddEventDialogFragment";
     private Dialog dialog;
 
-    public int getAddItemTag() {
-        return addItemTag;
+    public int getFragmentTag() {
+        return fragmentTag;
     }
 
-    private int addItemTag;
+    private int fragmentTag;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        addItemTag = getArguments().getInt("AddItemTag");
+        fragmentTag = getArguments().getInt("FragmentTag");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 

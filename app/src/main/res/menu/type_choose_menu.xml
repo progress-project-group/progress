@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/studyButton"
+        android:title="study"
+        android:orderInCategory="0"
+        android:icon="@drawable/study_button"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/sportButton"
+        android:title="sport"
+        android:orderInCategory="0"
+        android:icon="@drawable/sport_button"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/relaxButton"
+        android:title="relax"
+        android:orderInCategory="0"
+        android:icon="@drawable/study_button"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/otherButton"
+        android:title="other"
+        android:orderInCategory="0"
+        android:icon="@drawable/other_button"
+        app:showAsAction="always"
+        />
+
+
+</menu>
