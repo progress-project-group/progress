@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.fragment_dailyPlan;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.progress_android.DailyPlanActivity;
+import com.progress_android.R;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -83,7 +85,7 @@ public class TimeLineFragment extends Fragment {
         Log.d(TAG,"onAddClick");
         DialogFragment dialog = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("FragmentTag",DailyPlanActivity.FragmentTag_TimeLine);
+        bundle.putInt("FragmentTag", DailyPlanActivity.FragmentTag_TimeLine);
         dialog.setArguments(bundle);
         dialog.setCancelable(false);
         dialog.show(getChildFragmentManager(), "AddEventDialogFragment");

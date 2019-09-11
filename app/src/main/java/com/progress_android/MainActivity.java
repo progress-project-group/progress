@@ -51,5 +51,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button SummaryTestButton = (Button) findViewById(R.id.SummaryTestButton);
+        SummaryTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,DailySummaryActivity.class);
+                Log.d(TAG,"startSummaryTestActivity");
+                startActivity(intent);
+            }
+        });
     }
 }

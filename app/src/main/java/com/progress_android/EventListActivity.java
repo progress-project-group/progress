@@ -52,7 +52,7 @@ public class EventListActivity extends AppCompatActivity
         dragDropManager.attachRecyclerView(eventListRecyclerView);
         //swipeManager.attachRecyclerView(eventListRecyclerView);
 
-        FloatingActionButton addEventButton = (FloatingActionButton) findViewById(R.id.add_event_button);
+        FloatingActionButton addEventButton = findViewById(R.id.add_event_button);
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

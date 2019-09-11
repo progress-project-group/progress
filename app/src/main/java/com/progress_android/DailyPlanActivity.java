@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerTitleStrip;
@@ -31,6 +30,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.KeyEvent;
 import android.widget.Toast;
+
+import com.progress_android.fragment_dailyPlan.EventListFragment;
+import com.progress_android.fragment_dailyPlan.TimeLineFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

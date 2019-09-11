@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.fragment_dailyPlan;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
+import com.progress_android.DailyPlanActivity;
+import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +81,7 @@ public class EventListFragment extends Fragment{
     private void showAddEventDialog(){
         DialogFragment dialog = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("FragmentTag",DailyPlanActivity.FragmentTag_EventList);
+        bundle.putInt("FragmentTag", DailyPlanActivity.FragmentTag_EventList);
         dialog.setArguments(bundle);
         dialog.setCancelable(false);
         dialog.show(getChildFragmentManager(), "AddEventDialogFragment");

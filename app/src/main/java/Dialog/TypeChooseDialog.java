@@ -66,19 +66,19 @@ public class TypeChooseDialog extends DialogFragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch(checkedId){
                     case R.id.study_button: 
-                        dialog.setTitle("学习");
+                        dialog.setTitle(Item.sStudy);
                         checkedItem = Item.STUDY;
                         break;
                     case R.id.sport_button: 
-                        dialog.setTitle("运动");
+                        dialog.setTitle(Item.sSPORT);
                         checkedItem = Item.SPORT;
                         break;
                     case R.id.relax_button: 
-                        dialog.setTitle("休息");
+                        dialog.setTitle(Item.sRELAX);
                         checkedItem = Item.RELAX;
                         break;
                     case R.id.other_button: 
-                        dialog.setTitle("其他");
+                        dialog.setTitle(Item.sOTHER);
                         checkedItem = Item.OTHER;
                         break;
                 }

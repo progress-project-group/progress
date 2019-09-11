@@ -133,7 +133,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         ItemInTimeline itemInTimeline = mItemInTimelineList.get(position);
         int imageId = itemInTimeline.getTimePointImageId();
         holder.matterContent.setText(itemInTimeline.getContent());
-        holder.startTime.setText(itemInTimeline.getStartTime());
+        holder.startTime.setText(itemInTimeline.getStarttimeText());
         holder.timePointImage.setImageResource(imageId);
 
         Log.d(TAG, "setType");
@@ -188,8 +188,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     public void updateItem(MyTime myTime, int position){
         Log.d(TAG,"updateItem");
         for(int i=0; i<mItemInTimelineList.size(); ++i){
-            //Log.d(TAG, "StartTime: " + mItemInTimelineList.get(i).getStartTime())
-            if(mItemInTimelineList.get(i).getStartTime().equals(myTime.toString())){
+            //Log.d(TAG, "StartTime: " + mItemInTimelineList.get(i).getStarttimeText())
+            if(mItemInTimelineList.get(i).getStarttimeText().equals(myTime.toString())){
                 Toast.makeText(context, "该时间点已有事件", Toast.LENGTH_SHORT).show();
                 Log.d(TAG,"Item startTime collide");
                 return;

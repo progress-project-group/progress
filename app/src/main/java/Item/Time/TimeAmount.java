@@ -48,4 +48,13 @@ public class TimeAmount {
 
         this.minutes = pomodoro.getTotal()*pomodoroNums;
     }
+
+    public TimeAmount(){
+        minutes = 0;
+    }
+
+    public void add(TimeAmount timeAmount){
+        this.minutes +=timeAmount.minutes;
+    }
+
 }

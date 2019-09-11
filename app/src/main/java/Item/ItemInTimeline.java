@@ -47,9 +47,11 @@ public class ItemInTimeline extends Item {
         return startTime.getMins();
     }
 
-    public String getStartTime() {
+    public String getStarttimeText() {
         return startTime.toString();
     }
+
+    public MyTime getStartTime(){return  startTime;}
 
     public boolean later(ItemInTimeline item){
         return this.startTime.later(item.startTime);
