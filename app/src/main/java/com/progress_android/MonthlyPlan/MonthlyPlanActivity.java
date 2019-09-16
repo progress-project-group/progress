@@ -1,6 +1,9 @@
 package com.progress_android.MonthlyPlan;
 
+import Adapter.ItemChangedHelper;
 import Adapter.MonthlyPlanAdapter;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +21,11 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.progress_android.MainActivity;
@@ -31,10 +36,9 @@ import java.util.List;
 
 public class MonthlyPlanActivity extends AppCompatActivity {
 
-    private static final String TAG = "Monthly";
-    private Context context = this;
+    MonthlyPlanAdapter month_adapter;
     private RecyclerView recyclerView;
-    List<MonthlyCard> monthlyCards = new ArrayList<>();
+    List<MonthlyPlanAdapter.MonthlyCard> monthlyCards = new ArrayList<>();
 
     private DrawerLayout drawerLayout;
     @Override
@@ -43,9 +47,9 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monthly_plan);
         initDrawerLayout();
         //添加按键
-        initFAB();
+        initAddButton();
         //initRecycleView
-        initRecycle();
+        initRecycleView();
     }
 
 
@@ -55,7 +59,23 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void initDrawerLayout(){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                    MonthlyPlanAdapter.MonthlyCard newCard = (MonthlyPlanAdapter.MonthlyCard) data
+                            .getSerializableExtra("new_plan");
+                    //刷新RecycleView
+                    monthlyCards.add(newCard);
+                    month_adapter.notifyItemInserted(monthlyCards.size() - 1);
+                    recyclerView.scrollToPosition(monthlyCards.size()-1);
+                }
+        }
+    }
+
+    private void initDrawerLayout(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.monthly_drawer_layout);
@@ -66,10 +86,9 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         toggle.syncState();
 
         toolbar.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()){
-                    case R.id.search:
-                        Toast.makeText(MonthlyPlanActivity.this,"search",Toast.LENGTH_SHORT).show();
-                }
+            if (item.getItemId() == R.id.search) {
+                Toast.makeText(MonthlyPlanActivity.this, "search", Toast.LENGTH_SHORT).show();
+            }
                 return false;
         });
         toolbar.setNavigationOnClickListener(v -> {
@@ -78,38 +97,79 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         });
     }
 
-    public void initRecycle(){
+    private void initRecycleView(){
         recyclerView = findViewById(R.id.month_recycler_view);
-        init();
+        initCard();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        MonthlyPlanAdapter adapter = new MonthlyPlanAdapter(monthlyCards);
-        recyclerView.setAdapter(adapter);
+        month_adapter = new MonthlyPlanAdapter(monthlyCards);
+        ItemTouchHelper itemTouchHelper =
+                new ItemTouchHelper(new MonthlyCardTouchCallBack(month_adapter));
+        recyclerView.setAdapter(month_adapter);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public void initFAB(){
+    private void initAddButton(){
         FloatingActionButton MAB = findViewById(R.id.monthly_add_button);
         MAB.setOnClickListener(v -> {
                 Intent intent = new Intent(MonthlyPlanActivity.this, EventAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
         });
     }
 
-    public void init()
+    private void initCard()
     {
-        MonthlyCard a = new MonthlyCard("a");
-        MonthlyCard b = new MonthlyCard("b");
-        MonthlyCard c = new MonthlyCard("c");
-        MonthlyCard d = new MonthlyCard("d");
-        MonthlyCard e = new MonthlyCard("e");
-        monthlyCards.add(a);
-        monthlyCards.add(b);
-        monthlyCards.add(c);
-        monthlyCards.add(d);
-        monthlyCards.add(e);
-        for(int i =0;i<100;i++)
-        {
-            monthlyCards.add(a);
+//        MonthlyCard a = new MonthlyCard("a");
+//        MonthlyCard b = new MonthlyCard("b");
+//        MonthlyCard c = new MonthlyCard("c");
+//        MonthlyCard d = new MonthlyCard("d");
+//        MonthlyCard e = new MonthlyCard("e");
+//        monthlyCards.add(a);
+//        monthlyCards.add(b);
+//        monthlyCards.add(c);
+//        monthlyCards.add(d);
+//        monthlyCards.add(e);
+//        for(int i =0;i<100;i++)
+//        {
+//            monthlyCards.add(a);
+//        }
+    }
+
+    private static class MonthlyCardTouchCallBack extends ItemTouchHelper.Callback{
+        private static final int DRAG_FLAGS = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        private static final int SWIPE_FLAGS = ItemTouchHelper.LEFT;
+        @Nullable private MaterialCardView dragCardView;
+        private final ItemChangedHelper mItemTouchStatus;
+
+        public MonthlyCardTouchCallBack(ItemChangedHelper itemTouchStatus) {
+            mItemTouchStatus = itemTouchStatus;
+        }
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeMovementFlags(DRAG_FLAGS,SWIPE_FLAGS);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return mItemTouchStatus.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            mItemTouchStatus.onItemRemove(viewHolder.getAdapterPosition());
+        }
+
+        @Override
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            //添加选中效果
+            if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && viewHolder != null) {
+                dragCardView = (MaterialCardView) viewHolder.itemView;
+                dragCardView.setDragged(true);
+            } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && dragCardView != null) {
+                dragCardView.setDragged(false);
+                dragCardView = null;
+            }
         }
     }
 }

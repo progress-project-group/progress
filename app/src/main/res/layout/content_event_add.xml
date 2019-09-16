@@ -27,7 +27,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/date_input"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,24 +39,13 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="4dp"-->
-<!--        app:errorEnabled="true">-->
-<!--        <AutoCompleteTextView-->
-<!--            android:id="@+id/outlined_exposed_dropdown"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
     <RadioGroup
+        android:id="@+id/type_radio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <RadioButton
-            android:id="@+id/partable"
+            android:id="@+id/separable"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:checked="true"
@@ -72,23 +60,24 @@
     </RadioGroup>
 
     <LinearLayout
-        android:id="@+id/extra"
+        android:id="@+id/addition"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/size_text"
+                android:id="@+id/progress_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:textSize="25dp"
                 android:text="10%"/>
             <SeekBar
-                android:id="@+id/size_slider"
+                android:id="@+id/progress_slider"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="48dp"
@@ -107,7 +96,7 @@
         android:layout_margin="@dimen/text_field_margin"
         android:hint="备注">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@id/extra"
+            android:id="@+id/remark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
