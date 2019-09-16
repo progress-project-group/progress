@@ -1,5 +1,7 @@
 package Item;
 
+import com.progress_android.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +11,15 @@ public class TypeItem{
     List<ExecutedItem> executedItemList = new ArrayList<>();
     int type;
     String content;
+    int colorId;
 
     public TypeItem(int type){
         this.type = type;
         switch (type){
-            case Item.STUDY: content = Item.sStudy; break;
-            case Item.SPORT: content = Item.sSPORT; break;
-            case Item.RELAX: content = Item.sRELAX; break;
-            case Item.OTHER: content = Item.sOTHER; break;
+            case Item.STUDY: content = Item.sStudy; colorId = R.color.blue; break;
+            case Item.SPORT: content = Item.sSPORT; colorId = R.color.red;break;
+            case Item.RELAX: content = Item.sRELAX; colorId = R.color.green;break;
+            case Item.OTHER: content = Item.sOTHER; colorId = R.color.yellow;break;
         }
     }
 
@@ -36,5 +39,11 @@ public class TypeItem{
 
     public String getContent(){
         return content;
+    }
+
+    public int getColor(){return colorId;}
+
+    public List<ExecutedItem> getExecutedItemList() {
+        return executedItemList;
     }
 }

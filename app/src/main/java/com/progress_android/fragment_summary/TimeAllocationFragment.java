@@ -11,6 +11,7 @@ import Item.TypeItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,23 +31,24 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
+import static com.progress_android.DailySummaryActivity.tfLight;
+import static com.progress_android.DailySummaryActivity.tfRegular;
 
 
 public class TimeAllocationFragment extends Fragment {
 
     PieChart timeAllocationChart;
     ExecutedItemList executedItemList;
-    TypeItem studyItemList;
-    TypeItem sportItemList;
-    TypeItem relaxItemList;
-    TypeItem otherItemList;
-    Typeface tfRegular, tfLight;
+    List<TypeItem> typeItemList = new ArrayList<>();
+    SpecificTAFragment specificTAFragment;
+    String TAG = "TimeAllocationFragment";
 
     public TimeAllocationFragment() {
         // Required empty public constructor
@@ -75,7 +77,7 @@ public class TimeAllocationFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable final Bundle savedInstanceState) {
         timeAllocationChart = view.findViewById(R.id.time_allocate_chart);
 
         timeAllocationChart.setUsePercentValues(true);
@@ -100,7 +102,7 @@ public class TimeAllocationFragment extends Fragment {
 
         timeAllocationChart.setRotationAngle(0);
         // enable rotation of the chart by touch
-        timeAllocationChart.setRotationEnabled(true);
+        timeAllocationChart.setRotationEnabled(false);
         timeAllocationChart.setHighlightPerTapEnabled(true);
 
         // chart.setUnit(" €");
@@ -112,9 +114,17 @@ public class TimeAllocationFragment extends Fragment {
             public void onValueSelected(Entry e, Highlight h) {
                 if (e == null)
                     return;
-                Log.i("VAL SELECTED",
-                        "Value: " + e.getY() + ", index: " + h.getX()
-                                + ", DataSet index: " + h.getDataSetIndex());
+                Log.d(TAG, "selectedc begin");
+//                PieEntry entry = (PieEntry) e;
+//
+//                SpecificTAFragment specificTAFragment = new SpecificTAFragment();
+//                specificTAFragment.setTypeItem(typeItemList);
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+//                        .beginTransaction();
+//                transaction.replace(R.id.summary_pager, specificTAFragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
+//                Log.d(TAG, "selected end");
             }
 
             @Override
@@ -137,8 +147,6 @@ public class TimeAllocationFragment extends Fragment {
 
         // entry label styling
         timeAllocationChart.setEntryLabelColor(Color.WHITE);
-        tfRegular = Typeface.createFromAsset(getActivity().getAssets(), "OpenSans-Light.ttf");
-        tfLight = Typeface.createFromAsset(getActivity().getAssets(),"OpenSans-Light.ttf");
         timeAllocationChart.setEntryLabelTypeface(tfRegular);
         timeAllocationChart.setEntryLabelTextSize(12f);
 
@@ -147,15 +155,11 @@ public class TimeAllocationFragment extends Fragment {
     }
 
     public void setData(){
-        int total = studyItemList.getTimeAmount().getMinutes() +
-                sportItemList.getTimeAmount().getMinutes() +
-                relaxItemList.getTimeAmount().getMinutes() +
-                otherItemList.getTimeAmount().getMinutes();
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(studyItemList.getTimeAmount().getMinutes(), studyItemList.getContent()));
-        entries.add(new PieEntry(sportItemList.getTimeAmount().getMinutes(), sportItemList.getContent()));
-        entries.add(new PieEntry(relaxItemList.getTimeAmount().getMinutes(), relaxItemList.getContent()));
-        entries.add(new PieEntry(otherItemList.getTimeAmount().getMinutes(), otherItemList.getContent()));
+        for(int i=0; i< DailySummaryActivity.typeNum; ++i){
+            TypeItem currentTypeItem = typeItemList.get(i);
+            entries.add(new PieEntry(currentTypeItem.getTimeAmount().getMinutes(), currentTypeItem.getContent()));
+        }
 
         PieDataSet set = new PieDataSet(entries,"本日时间分配");
         set.setSliceSpace(3f);
@@ -173,14 +177,8 @@ public class TimeAllocationFragment extends Fragment {
     }
 
     public void setList(ExecutedItemList executedItemList,
-            TypeItem studyItemList,
-            TypeItem sportItemList,
-            TypeItem relaxItemList,
-            TypeItem otherItemList){
+            List<TypeItem> typeItemList){
         this.executedItemList = executedItemList;
-        this.studyItemList = studyItemList;
-        this.relaxItemList = relaxItemList;
-        this.sportItemList = sportItemList;
-        this.otherItemList = otherItemList;
+        this.typeItemList = typeItemList;
     }
 }

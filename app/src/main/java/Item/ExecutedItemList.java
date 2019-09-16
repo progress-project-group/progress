@@ -25,4 +25,8 @@ public class ExecutedItemList {
         addOrderPoint(executedItem);
         currentItem = executedItem;
     }
+
+    public int getItemCount(){
+        return executedItemList.size();
+    }
 }
