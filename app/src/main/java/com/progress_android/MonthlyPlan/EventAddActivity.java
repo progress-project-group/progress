@@ -16,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.renderscript.ScriptGroup;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -39,21 +41,57 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EventAddActivity extends AppCompatActivity {
-    private String title;
+    private int mode;
+    private String title, remark;
     private Date due_date;
-    private String remark;
     private boolean type;
     private int progress;
     SimpleDateFormat simpleDateFormat;
     private TextInputEditText title_text, due_date_text, remark_text;
     private MaterialTextView progress_text;
     private RadioGroup type_radio;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
-        Toolbar toolbar = findViewById(R.id.event_toolbar);
+
+        mode = getIntent().getIntExtra("mode",0);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        initTollBar();
+        initEditText();
+        initRadioGroup();
+        initProgressSlider();
+        initEditButton();
+        initLayout();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void initLayout(){
+        if (mode == 0){
+            fab.setVisibility(View.GONE);
+        }
+        else {
+            Intent fromIntent = getIntent();
+            MonthlyPlanAdapter.MonthlyCard revisedCard = (MonthlyPlanAdapter.MonthlyCard)
+                    fromIntent.getSerializableExtra("card");
+            title_text.setText(revisedCard.getTitle());
+            remark_text.setText(revisedCard.getRemark());
+            due_date_text.setText(simpleDateFormat.format(revisedCard.getDue_date()));
+            progress_text.setText(revisedCard.getProgress() + "%");
+            if (!revisedCard.getType()){
+                RadioButton type = findViewById(R.id.complete);
+                type.setChecked(true);
+            }
+        }
+    }
+    private void initTollBar(){
+        Toolbar toolbar = findViewById(R.id.event_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {
             new MaterialAlertDialogBuilder(EventAddActivity.this)
@@ -66,12 +104,35 @@ public class EventAddActivity extends AppCompatActivity {
                         finish();
                     }).show();
         });
-        initEditText();
-        initRadioGroup();
-        initProgressSlider();
-        initEditButton();
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.done){
+                title = title_text.getText().toString();
+                try {
+                    due_date = simpleDateFormat.parse(due_date_text.getText().toString());
+                } catch (ParseException e) {
+                    //改成其他提示
+                    Toast.makeText(EventAddActivity.this,"date wrong",Toast.LENGTH_LONG).show();
+                }
+                remark = remark_text.getText().toString();
+                int selectedType = type_radio.getCheckedRadioButtonId();
+                type = (selectedType == R.id.separable);
+                String percent = progress_text.getText().toString();
+                progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
+                //返回给月计划一个行的计划
+                Intent intent = new Intent();
+                MonthlyPlanAdapter.MonthlyCard newMonthlyCard = new MonthlyPlanAdapter.MonthlyCard
+                        (title, due_date, remark, type, progress);
+                intent.putExtra("new_plan",newMonthlyCard);
+                if (mode == 1){
+                    Intent fromIntent = getIntent();
+                    intent.putExtra("position", fromIntent.getIntExtra("position",-1));
+                }
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+            return false;
+        });
     }
-
     private void initEditText(){
         title_text = findViewById(R.id.title);
         due_date_text = findViewById(R.id.due_date);
@@ -122,28 +183,12 @@ public class EventAddActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
     }
+
+    //考虑其实用性，暂时不实现
     private void initEditButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            title = title_text.getText().toString();
-            try {
-                due_date = simpleDateFormat.parse(due_date_text.getText().toString());
-            } catch (ParseException e) {
-                //改成其他提示
-                Toast.makeText(EventAddActivity.this,"date wrong",Toast.LENGTH_LONG).show();
-            }
-            remark = remark_text.getText().toString();
-            int selectedType = type_radio.getCheckedRadioButtonId();
-            type = (selectedType == R.id.separable);
-            String percent = progress_text.getText().toString();
-            progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
-            //返回给月计划一个行的计划
-            MonthlyPlanAdapter.MonthlyCard newMonthlyCard = new MonthlyPlanAdapter.MonthlyCard
-                    (title, due_date, remark, type, progress);
-            Intent intent = new Intent();
-            intent.putExtra("new_plan",newMonthlyCard);
-            setResult(RESULT_OK,intent);
-            finish();
+
         });
     }
 
@@ -160,7 +205,9 @@ public class EventAddActivity extends AppCompatActivity {
                 ((view, year, month, dayOfMonth) -> {
                     //月份少一，暂时先手动添加
                     month++;
-                    date.setText(year + "-" + month + "-" + dayOfMonth);
+                    String inputText = year + "-" + month + "-" + dayOfMonth;
+                    date.setText(inputText);
+                    date.setSelection(inputText.length());
                 }), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }

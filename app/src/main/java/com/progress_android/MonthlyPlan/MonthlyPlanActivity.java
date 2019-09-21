@@ -31,7 +31,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.progress_android.MainActivity;
 import com.progress_android.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MonthlyPlanActivity extends AppCompatActivity {
@@ -55,23 +57,33 @@ public class MonthlyPlanActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.monthly_list_toolbar_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        MonthlyPlanAdapter.MonthlyCard newCard = (MonthlyPlanAdapter.MonthlyCard) data
+                .getSerializableExtra("new_plan");
         switch (requestCode){
             case 1:
                 if (resultCode == RESULT_OK){
-                    MonthlyPlanAdapter.MonthlyCard newCard = (MonthlyPlanAdapter.MonthlyCard) data
-                            .getSerializableExtra("new_plan");
                     //刷新RecycleView
                     monthlyCards.add(newCard);
                     month_adapter.notifyItemInserted(monthlyCards.size() - 1);
-                    recyclerView.scrollToPosition(monthlyCards.size()-1);
+                    recyclerView.scrollToPosition(monthlyCards.size() - 1);
                 }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK){
+                    int position = data.getIntExtra("position" , -2);
+                    if (position >= 0 ){
+                        monthlyCards.set(position, newCard);
+                        month_adapter.notifyItemChanged(position);
+                    }
+                }
+                break;
         }
     }
 
@@ -102,7 +114,7 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         initCard();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        month_adapter = new MonthlyPlanAdapter(monthlyCards);
+        month_adapter = new MonthlyPlanAdapter(monthlyCards, this);
         ItemTouchHelper itemTouchHelper =
                 new ItemTouchHelper(new MonthlyCardTouchCallBack(month_adapter));
         recyclerView.setAdapter(month_adapter);
@@ -113,12 +125,15 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         FloatingActionButton MAB = findViewById(R.id.monthly_add_button);
         MAB.setOnClickListener(v -> {
                 Intent intent = new Intent(MonthlyPlanActivity.this, EventAddActivity.class);
+                intent.putExtra("mode", 0);
                 startActivityForResult(intent,1);
         });
     }
 
-    private void initCard()
-    {
+    private void initCard() {
+        MonthlyPlanAdapter.MonthlyCard a = new
+                MonthlyPlanAdapter.MonthlyCard("AAAaaa",new Date(),"SDAD",true,50);
+        monthlyCards.add(a);
 //        MonthlyCard a = new MonthlyCard("a");
 //        MonthlyCard b = new MonthlyCard("b");
 //        MonthlyCard c = new MonthlyCard("c");
