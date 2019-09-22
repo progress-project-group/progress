@@ -16,10 +16,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,17 +60,31 @@ public class MonthlyPlanActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.monthly_list_toolbar_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView mSearchView = (SearchView) searchItem.getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                month_adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MonthlyPlanAdapter.MonthlyCard newCard = (MonthlyPlanAdapter.MonthlyCard) data
-                .getSerializableExtra("new_plan");
+        MonthlyPlanAdapter.MonthlyCard newCard;
         switch (requestCode){
             case 1:
                 if (resultCode == RESULT_OK){
+                    newCard = (MonthlyPlanAdapter.MonthlyCard) data.getSerializableExtra("new_plan");
                     //刷新RecycleView
                     monthlyCards.add(newCard);
                     month_adapter.notifyItemInserted(monthlyCards.size() - 1);
@@ -77,6 +93,7 @@ public class MonthlyPlanActivity extends AppCompatActivity {
                 break;
             case 2:
                 if (resultCode == RESULT_OK){
+                    newCard = (MonthlyPlanAdapter.MonthlyCard) data.getSerializableExtra("new_plan");
                     int position = data.getIntExtra("position" , -2);
                     if (position >= 0 ){
                         monthlyCards.set(position, newCard);
@@ -98,9 +115,6 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         toggle.syncState();
 
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.search) {
-                Toast.makeText(MonthlyPlanActivity.this, "search", Toast.LENGTH_SHORT).show();
-            }
                 return false;
         });
         toolbar.setNavigationOnClickListener(v -> {

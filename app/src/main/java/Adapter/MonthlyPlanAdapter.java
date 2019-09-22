@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.progress_android.MonthlyPlan.EventAddActivity;
@@ -13,6 +15,7 @@ import com.progress_android.MonthlyPlan.MonthlyPlanActivity;
 import com.progress_android.R;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +27,14 @@ enum State{
     NOTSTARTED, DOING, COMPLETE, DISCARD
 }
 
-public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.ViewHolder> implements ItemChangedHelper{
+public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.ViewHolder>
+        implements ItemChangedHelper, Filterable {
     List<MonthlyCard> cards;
+    List<MonthlyCard> sourceCards;
     Context context;
     public MonthlyPlanAdapter(List<MonthlyCard> cards, Context context){
         this.cards = cards;
+        this.sourceCards = cards;
         this.context = context;
     }
 
@@ -78,6 +84,37 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
         cards.remove(removePosition);
         notifyItemRemoved(removePosition);
         return true;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String searchString = constraint.toString();
+                if (!searchString.isEmpty()){
+                    List<MonthlyCard> tempCards = new ArrayList<>();
+                    for (MonthlyCard card : sourceCards){
+                        if (card.getTitle().contains(searchString)){
+                            tempCards.add(card);
+                        }
+                    }
+                    cards = tempCards;
+                }
+                else {
+                    cards = sourceCards;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = cards;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                cards = (ArrayList<MonthlyCard>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
