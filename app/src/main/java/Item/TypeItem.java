@@ -15,12 +15,8 @@ public class TypeItem{
 
     public TypeItem(int type){
         this.type = type;
-        switch (type){
-            case Item.STUDY: content = Item.sStudy; colorId = R.color.blue; break;
-            case Item.SPORT: content = Item.sSPORT; colorId = R.color.red;break;
-            case Item.RELAX: content = Item.sRELAX; colorId = R.color.green;break;
-            case Item.OTHER: content = Item.sOTHER; colorId = R.color.yellow;break;
-        }
+        content = Item.typeName[type];
+        colorId = Item.colorId[type];
     }
 
     public void addExecutedItem(ExecutedItem executedItem){

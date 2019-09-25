@@ -20,6 +20,8 @@ public class ExecutedItem extends Item {
     List<String> stopReason = new ArrayList<>();        //可为空
     List<ExecutedItem> next = new ArrayList<>();
 
+    int currentItem = 0;
+
     public ExecutedItem(EventItem eventItem){
         super(eventItem);
         planedTimeAmount = eventItem.getTimeAmount();
@@ -72,4 +74,22 @@ public class ExecutedItem extends Item {
         }
     }
 
+    public ExecutedItem getNext(){
+        if(currentItem>=next.size()){
+            return null;
+        }
+        return next.get(currentItem);
+    }
+
+    public MyTime getStartTime(){
+        return startTime.get(currentItem);
+    }
+
+    public MyTime getEndTime(){
+        return endTime.get(currentItem);
+    }
+
+    public void toNext(){
+        currentItem++;
+    }
 }

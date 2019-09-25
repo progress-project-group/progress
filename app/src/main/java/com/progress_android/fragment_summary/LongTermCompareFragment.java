@@ -1,111 +1,121 @@
 package com.progress_android.fragment_summary;
 
 import android.content.Context;
+import android.content.Entity;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import Item.Item;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LongTermCompareFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LongTermCompareFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class LongTermCompareFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //该数据需要从数据库中读取
+    int typeNum = 4;
+    int showedNum = 7;
+    LineChart longTermChart;
 
-    private OnFragmentInteractionListener mListener;
+    public LongTermCompareFragment(){
 
-    public LongTermCompareFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LongTermCompareFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LongTermCompareFragment newInstance(String param1, String param2) {
-        LongTermCompareFragment fragment = new LongTermCompareFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_long_term_compare, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        longTermChart = view.findViewById(R.id.longTermChart);
+        setDefaultData();
+        longTermChart.getDescription().setEnabled(false);
+
+        XAxis xl = longTermChart.getXAxis();
+        String[] Xlabel = new String[]{"", "周一","周二","周三","周四","周五","周六","周日",""};
+        xl.setValueFormatter(new XAxisValueFormatter(Xlabel));
+
+        YAxis yl = longTermChart.getAxisLeft();
+        YAxis yr = longTermChart.getAxisRight();
+        yl.setValueFormatter(new YAxisValueFormatter("h"));
+        yr.setValueFormatter(new YAxisValueFormatter("h"));
+    }
+
+    private void setData(){
+        //需要从数据库里读取最近一周数据
+    }
+
+    private void setDefaultData(){
+        List<ILineDataSet> sets = new ArrayList<>();
+        float lineWidth = 3f;
+        for(int i = 0; i < typeNum; ++i){
+            List<Entry> groupData = new ArrayList<>();
+            for(int j = 0; j<showedNum; ++j){
+                groupData.add(new Entry(j+1, (float) Math.random()*5));
+            }
+            LineDataSet set = new LineDataSet(groupData, Item.typeName[i]);
+            set.setLineWidth(lineWidth);
+            set.setColors(getResources().getColor(Item.colorId[i]));
+            sets.add(set);
         }
+        LineData lineData = new LineData(sets);
+        longTermChart.setData(lineData);
+        longTermChart.invalidate();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+    public class XAxisValueFormatter extends IndexAxisValueFormatter {
+        private String[] values;
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        public XAxisValueFormatter(String[] values) {
+            this.values = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            if(value>=values.length||value<0){
+                return "";
+            }
+            return values[(int)value];
+        }
+
+    }
+    public class YAxisValueFormatter extends IndexAxisValueFormatter {
+        private String values;
+
+        public YAxisValueFormatter(String values) {
+            this.values = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            DecimalFormat decimalFormat = new DecimalFormat(".0");
+            return decimalFormat.format(value) + values;
+        }
+
     }
 }

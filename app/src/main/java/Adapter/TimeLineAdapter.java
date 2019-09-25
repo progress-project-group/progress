@@ -28,6 +28,9 @@ import Item.ItemInTimeline;
 import Item.Time.MyTime;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+
 
 /**
  * Created by Yamaa on 2019/3/20.
@@ -42,8 +45,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         EditText matterContent;
         TextView startTime;
         ImageView timePointImage;
-        View timeAmount;
-        View ambTimeline;
+        View frontLine;
+        View backLine;
         Button timeLineItemDeleteButton;
         Button timeLineItemSettingButton;
         Button typeChooseButton;
@@ -53,8 +56,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             matterContent = (EditText) view.findViewById(R.id.matter_content);
             startTime = (TextView) view.findViewById(R.id.start_time);
             timePointImage = (ImageView) view.findViewById(R.id.time_point_image);
-            timeAmount = (View) view.findViewById(R.id.time_amount);
-            ambTimeline = (View) view.findViewById(R.id.ambiguous_timeline);
+            frontLine = (View) view.findViewById(R.id.frontLine);
+            backLine = view.findViewById(R.id.backLine);
             timeLineItemDeleteButton = (Button) view.findViewById(R.id.timeLineItem_delete_button);
             timeLineItemSettingButton = (Button) view.findViewById(R.id.timeLineItem_setting_button);
             typeChooseButton = (Button) view.findViewById(R.id.timeLineItem_typeChoose_button);
@@ -88,6 +91,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 int position = holder.getAdapterPosition();
                 mItemInTimelineList.remove(position);
                 notifyItemRemoved(position);
+                notifyDataSetChanged();
             }
         });
 
@@ -126,10 +130,16 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     public void addItem(int position, ItemInTimeline item){
         mItemInTimelineList.add(position,item);
         notifyItemInserted(position);
+        notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if(position == 0){
+            holder.frontLine.setVisibility(INVISIBLE);
+        }else if(position == getItemCount()-1){
+            holder.backLine.setVisibility(INVISIBLE);
+        }
         ItemInTimeline itemInTimeline = mItemInTimelineList.get(position);
         int imageId = itemInTimeline.getTimePointImageId();
         holder.matterContent.setText(itemInTimeline.getContent());
@@ -137,12 +147,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         holder.timePointImage.setImageResource(imageId);
 
         Log.d(TAG, "setType");
-        switch(itemInTimeline.getVariety()) {
-            case Item.STUDY: holder.typeChooseButton.setBackgroundResource(R.drawable.study); break;
-            case Item.SPORT: holder.typeChooseButton.setBackgroundResource(R.drawable.sport); break;
-            case Item.RELAX: holder.typeChooseButton.setBackgroundResource(R.drawable.relax); break;
-            case Item.OTHER: holder.typeChooseButton.setBackgroundResource(R.drawable.other); break;
-        }
+        holder.typeChooseButton.setBackgroundResource(Item.iconId[itemInTimeline.getVariety()]);
 
         /*修改时间轴颜色、长度
         LinearLayout.LayoutParams timeAmountLayoutParams = (LinearLayout.LayoutParams) holder.timeAmount.getLayoutParams();

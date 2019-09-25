@@ -17,8 +17,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import com.progress_android.fragment_summary.LongTermCompareFragment;
 import com.progress_android.fragment_summary.SpecificTAFragment;
 import com.progress_android.fragment_summary.TimeAllocationFragment;
+import com.progress_android.fragment_summary.TimeLineFragement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,7 @@ import java.util.List;
 public class DailySummaryActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-    int NUM_ITEMS = 2;
-    public static final int typeNum = 4;
+    int NUM_ITEMS = 3;
     ExecutedItemList executedItemList = new ExecutedItemList();
     List<String> typeLabel = new ArrayList<>();
     List<TypeItem> typeItemList = new ArrayList<>();
@@ -123,5 +124,12 @@ public class DailySummaryActivity extends AppCompatActivity {
         SpecificTAFragment specificTAFragment = new SpecificTAFragment();
         specificTAFragment.setTypeItem(itemList, executedItemList.getItemCount());
         fragmentList.add(specificTAFragment);
+
+//        TimeLineFragement timeLineFragement = new TimeLineFragement();
+//        timeLineFragement.setList(executedItemList);
+//        fragmentList.add(timeLineFragement);
+
+        LongTermCompareFragment longTermCompareFragment = new LongTermCompareFragment();
+        fragmentList.add(longTermCompareFragment);
     }
 }

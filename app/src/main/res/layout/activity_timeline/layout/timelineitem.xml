@@ -12,6 +12,13 @@
             android:orientation="vertical"
             android:paddingLeft="30dp">
 
+            <View
+                android:id="@+id/frontLine"
+                android:layout_width="2dp"
+                android:layout_height="50dp"
+                android:background="@color/blue"
+                />
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -19,19 +26,12 @@
                 />
 
             <View
-                android:id="@+id/time_amount"
+                android:id="@+id/backLine"
                 android:layout_width="2dp"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:background="@color/blue"
                 />
 
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="40dp"
-                android:visibility="gone"
-                android:background="@drawable/yellow_green_gradient"
-                android:id="@+id/ambiguous_timeline"/>
         </LinearLayout>
 
 

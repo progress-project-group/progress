@@ -29,7 +29,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
-
+import Item.Item;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,10 +98,11 @@ public class SpecificTAFragment extends Fragment {
         xl.setDrawGridLines(false);
         //xl.setGranularity(8f);
         xl.setDrawLabels(true);
-        xl.setCenterAxisLabels(true);
-        xl.setLabelCount(labelCount+1,true);
-        xl.setAvoidFirstLastClipping(true);
+        //xl.setCenterAxisLabels(true);
+        //xl.setLabelCount(labelCount,true);
+        //xl.setAvoidFirstLastClipping(true);
         xl.setValueFormatter(new XAxisValueFormatter(label));
+
 
         YAxis yl = barChart.getAxisLeft();
         yl.setTypeface(tfLight);
@@ -131,20 +132,23 @@ public class SpecificTAFragment extends Fragment {
     }
 
     public void setTypeItem(List<TypeItem> typeItemList, int itemCount){
-         labelCount = itemCount;
+         labelCount = 6;
          this.typeItemList = typeItemList;
     }
     public void setData(){
         label = new String[labelCount+2];
-        float barWidth = 1.3f;
-        float spaceForBar = 3f;
+        //float barWidth = 1.5f;
         List<IBarDataSet> sets = new ArrayList<>();
         int count = 0;
-        for(int i=0; i< DailySummaryActivity.typeNum; ++i){
+        label[count] = "";
+        for(int i=0; i< Item.typeNum; ++i){
             List<BarEntry> entries = new ArrayList<>();
             List<ExecutedItem> currentExeItem = typeItemList.get(i).getExecutedItemList();
             for(int j=0; j<currentExeItem.size(); ++j){
-                entries.add(new BarEntry(count*spaceForBar, currentExeItem.get(j).getTimeAmount().getMinutes()/60));
+                if(count>labelCount){
+                    break;
+                }
+                entries.add(new BarEntry(count, currentExeItem.get(j).getTimeAmount().getMinutes()/60));
                 label[count] = currentExeItem.get(j).getContent();
                 Log.d(TAG, "count = " + count);
                 Log.d(TAG, "content = " + label[count]);
@@ -156,14 +160,14 @@ public class SpecificTAFragment extends Fragment {
             sets.add(set);
         }
         Log.d(TAG, "outside count = " + count);
-        label[count++] = "";
+        //label[count++] = "";
         label[count] = "";
 
         BarData data = new BarData(sets);
 
         data.setValueTextSize(10f);
         data.setValueTypeface(tfLight);
-        data.setBarWidth(barWidth);
+        //data.setBarWidth(barWidth);
         barChart.setData(data);
         barChart.invalidate();
     }
@@ -179,11 +183,13 @@ public class SpecificTAFragment extends Fragment {
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            double interval = (1.15+16.15)/(labelCount-1);
-            Log.d(TAG,"outside value = "+interval);
-            int index = (int) ((value+1.15)/2.47);
-
-            return values[index];
+            //double interval = (1.15+16.15)/(labelCount-1);
+            Log.d(TAG,"outside value = "+value);
+            //int index = (int) ((value+1.15)/2.47);
+            if(value>=values.length||value<0){
+                return ""+value;
+            }
+            return values[(int) value];
         }
 
     }

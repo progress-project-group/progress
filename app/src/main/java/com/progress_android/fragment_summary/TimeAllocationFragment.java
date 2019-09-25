@@ -156,7 +156,7 @@ public class TimeAllocationFragment extends Fragment {
 
     public void setData(){
         List<PieEntry> entries = new ArrayList<>();
-        for(int i=0; i< DailySummaryActivity.typeNum; ++i){
+        for(int i=0; i< Item.typeNum; ++i){
             TypeItem currentTypeItem = typeItemList.get(i);
             entries.add(new PieEntry(currentTypeItem.getTimeAmount().getMinutes(), currentTypeItem.getContent()));
         }

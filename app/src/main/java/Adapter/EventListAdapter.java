@@ -227,12 +227,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         }
 
         Log.d(TAG, "setType");
-        switch(eventItem.getVariety()) {
-            case Item.STUDY: holder.type_button.setBackgroundResource(R.drawable.study); break;
-            case Item.SPORT: holder.type_button.setBackgroundResource(R.drawable.sport); break;
-            case Item.RELAX: holder.type_button.setBackgroundResource(R.drawable.relax); break;
-            case Item.OTHER: holder.type_button.setBackgroundResource(R.drawable.other); break;
-        }
+        holder.type_button.setBackgroundResource(Item.iconId[eventItem.getVariety()]);
     }
 
 
