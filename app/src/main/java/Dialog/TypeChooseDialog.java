@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
 
 import java.util.ArrayList;
