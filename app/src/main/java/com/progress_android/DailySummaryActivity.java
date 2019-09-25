@@ -14,9 +14,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
+import com.progress_android.fragment_summary.LongTermCompareFragment;
+import com.progress_android.fragment_summary.SpecificTAFragment;
 import com.progress_android.fragment_summary.TimeAllocationFragment;
+import com.progress_android.fragment_summary.TimeLineFragement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +28,21 @@ import java.util.List;
 public class DailySummaryActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-    int NUM_ITEMS = 1;
+    int NUM_ITEMS = 3;
     ExecutedItemList executedItemList = new ExecutedItemList();
+    List<String> typeLabel = new ArrayList<>();
+    List<TypeItem> typeItemList = new ArrayList<>();
+
+    //used for test
     TypeItem studyItemList = new TypeItem(Item.STUDY);
     TypeItem sportItemList = new TypeItem(Item.SPORT);
     TypeItem relaxItemList = new TypeItem(Item.RELAX);
     TypeItem otherItemList = new TypeItem(Item.OTHER);
+
     List<Fragment> fragmentList = new ArrayList<>();
     List<String> pageTitleList = new ArrayList<>();
+
+    public static Typeface tfRegular, tfLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +52,8 @@ public class DailySummaryActivity extends AppCompatActivity {
         SummaryPagerAdapter adapter = new SummaryPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.summary_pager);
         viewPager.setAdapter(adapter);
+        tfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
+        tfLight = Typeface.createFromAsset(getAssets(),"OpenSans-Light.ttf");
     }
 
 
@@ -101,8 +114,22 @@ public class DailySummaryActivity extends AppCompatActivity {
         sportItemList.addExecutedItem(item6);
         executedItemList.addExecutedItem(item6);
 
+        List<TypeItem> itemList = new ArrayList<>();
+        itemList.add(studyItemList); itemList.add(sportItemList); itemList.add(relaxItemList); itemList.add(otherItemList);
+
         TimeAllocationFragment timeAllocationFragment = new TimeAllocationFragment();
-        timeAllocationFragment.setList(executedItemList,studyItemList, sportItemList, relaxItemList, otherItemList);
+        timeAllocationFragment.setList(executedItemList,itemList);
         fragmentList.add(timeAllocationFragment);
+
+        SpecificTAFragment specificTAFragment = new SpecificTAFragment();
+        specificTAFragment.setTypeItem(itemList, executedItemList.getItemCount());
+        fragmentList.add(specificTAFragment);
+
+//        TimeLineFragement timeLineFragement = new TimeLineFragement();
+//        timeLineFragement.setList(executedItemList);
+//        fragmentList.add(timeLineFragement);
+
+        LongTermCompareFragment longTermCompareFragment = new LongTermCompareFragment();
+        fragmentList.add(longTermCompareFragment);
     }
 }

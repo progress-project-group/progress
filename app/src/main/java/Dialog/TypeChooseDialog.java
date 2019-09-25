@@ -9,7 +9,12 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import Item.Item;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +26,7 @@ public class TypeChooseDialog extends DialogFragment {
     public RadioButton sportChoose_button;
     public RadioButton relaxChoose_button;
     public RadioButton otherChoose_button;
+    public List<RadioButton> typeChooseButton = new ArrayList<>();
     public RadioGroup typeGroup;
     private Dialog dialog;
     public int position;
@@ -47,39 +53,34 @@ public class TypeChooseDialog extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View DialogView = inflater.inflate(R.layout.type_choose_dialog, null);
-        studyChoose_button = DialogView.findViewById(R.id.study_button);
-        sportChoose_button = DialogView.findViewById(R.id.sport_button);
-        relaxChoose_button = DialogView.findViewById(R.id.relax_button);
-        otherChoose_button = DialogView.findViewById(R.id.other_button);
-        switch(checkedItem){
-            case Item.STUDY: studyChoose_button.setChecked(true); break;
-            case Item.SPORT: sportChoose_button.setChecked(true); break;
-            case Item.RELAX: relaxChoose_button.setChecked(true); break;
-            case Item.OTHER: otherChoose_button.setChecked(true); break;
+        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.study_button));
+        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.sport_button));
+        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.relax_button));
+        typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.other_button));
 
+        if(checkedItem < Item.typeNum) {
+            typeChooseButton.get(checkedItem).setChecked(true);
         }
+
         typeGroup = DialogView.findViewById(R.id.type_group);
         typeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch(checkedId){
                     case R.id.study_button: 
-                        dialog.setTitle(Item.sStudy);
                         checkedItem = Item.STUDY;
                         break;
-                    case R.id.sport_button: 
-                        dialog.setTitle(Item.sSPORT);
+                    case R.id.sport_button:
                         checkedItem = Item.SPORT;
                         break;
-                    case R.id.relax_button: 
-                        dialog.setTitle(Item.sRELAX);
+                    case R.id.relax_button:
                         checkedItem = Item.RELAX;
                         break;
-                    case R.id.other_button: 
-                        dialog.setTitle(Item.sOTHER);
+                    case R.id.other_button:
                         checkedItem = Item.OTHER;
                         break;
                 }
+                dialog.setTitle(Item.typeName[checkedItem]);
             }
         });
         dialog = builder.setView(DialogView)
