@@ -76,13 +76,15 @@ public class EventAddActivity extends AppCompatActivity {
         if (mode == 0){
             fab.setVisibility(View.GONE);
         }
-        else {
-            Intent fromIntent = getIntent();
+        Intent fromIntent = getIntent();
+        if (fromIntent.getSerializableExtra("card") != null){
             MonthlyPlanAdapter.MonthlyCard revisedCard = (MonthlyPlanAdapter.MonthlyCard)
                     fromIntent.getSerializableExtra("card");
             title_text.setText(revisedCard.getTitle());
             remark_text.setText(revisedCard.getRemark());
-            due_date_text.setText(simpleDateFormat.format(revisedCard.getDue_date()));
+            if (revisedCard.getDue_date() != null){
+                due_date_text.setText(simpleDateFormat.format(revisedCard.getDue_date()));
+            }
             progress_text.setText(revisedCard.getProgress() + "%");
             if (!revisedCard.getType()){
                 RadioButton type = findViewById(R.id.complete);
@@ -94,35 +96,38 @@ public class EventAddActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.event_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {
-            new MaterialAlertDialogBuilder(EventAddActivity.this)
-                    .setTitle("是否保存编辑信息")
-                    .setPositiveButton("确定",(dialog, which) -> {
-                        //待完成
-                        finish();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                        finish();
-                    }).show();
+            Intent intent = new Intent();
+            boolean flag = handleDate(intent);
+            if (mode == 0&&(!title.isEmpty()||!remark.isEmpty()||flag)){
+                new MaterialAlertDialogBuilder(EventAddActivity.this)
+                        .setTitle("是否保存本次编辑")
+                        .setPositiveButton("保存",(dialog, which) -> {
+
+                            setResult(2, intent);
+                            finish();
+                        })
+                        .setNegativeButton("不保存", (dialog, which) -> {
+                            finish();
+                        }).show();
+            }
+            else {
+                finish();
+            }
         });
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.done){
-                title = title_text.getText().toString();
-                try {
-                    due_date = simpleDateFormat.parse(due_date_text.getText().toString());
-                } catch (ParseException e) {
-                    //改成其他提示
-                    Toast.makeText(EventAddActivity.this,"date wrong",Toast.LENGTH_LONG).show();
-                }
-                remark = remark_text.getText().toString();
-                int selectedType = type_radio.getCheckedRadioButtonId();
-                type = (selectedType == R.id.separable);
-                String percent = progress_text.getText().toString();
-                progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
-                //返回给月计划一个行的计划
+                //返回给月计划一个新的计划
                 Intent intent = new Intent();
-                MonthlyPlanAdapter.MonthlyCard newMonthlyCard = new MonthlyPlanAdapter.MonthlyCard
-                        (title, due_date, remark, type, progress);
-                intent.putExtra("new_plan",newMonthlyCard);
+                //若有数据不合法
+                boolean flag = handleDate(intent);
+                if (title.isEmpty()){
+                    popToast("请输入标题");
+                    return false;
+                }
+                else if (!flag){
+                    popToast("请输入截止日期");
+                    return false;
+                }
                 if (mode == 1){
                     Intent fromIntent = getIntent();
                     intent.putExtra("position", fromIntent.getIntExtra("position",-1));
@@ -210,5 +215,27 @@ public class EventAddActivity extends AppCompatActivity {
                     date.setSelection(inputText.length());
                 }), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
+    }
+    private boolean handleDate(Intent intent){
+        boolean flag = true;
+        title = title_text.getText().toString();
+        try {
+            due_date = simpleDateFormat.parse(due_date_text.getText().toString());
+        } catch (ParseException e) {
+            flag = false;
+        }
+        remark = remark_text.getText().toString();
+        int selectedType = type_radio.getCheckedRadioButtonId();
+        type = (selectedType == R.id.separable);
+        String percent = progress_text.getText().toString();
+        progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
+        //返回给月计划一个新的计划
+        MonthlyPlanAdapter.MonthlyCard newMonthlyCard = new MonthlyPlanAdapter.MonthlyCard
+                (title, due_date, remark, type, progress);
+        intent.putExtra("new_plan",newMonthlyCard);
+        return flag;
+    }
+    public void popToast(String msg){
+        Toast.makeText(EventAddActivity.this,msg,Toast.LENGTH_LONG).show();
     }
 }

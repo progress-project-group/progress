@@ -42,6 +42,7 @@ public class MonthlyPlanActivity extends AppCompatActivity {
 
     MonthlyPlanAdapter month_adapter;
     private RecyclerView recyclerView;
+    private MonthlyPlanAdapter.MonthlyCard savedCard;
     List<MonthlyPlanAdapter.MonthlyCard> monthlyCards = new ArrayList<>();
 
     private DrawerLayout drawerLayout;
@@ -89,6 +90,10 @@ public class MonthlyPlanActivity extends AppCompatActivity {
                     monthlyCards.add(newCard);
                     month_adapter.notifyItemInserted(monthlyCards.size() - 1);
                     recyclerView.scrollToPosition(monthlyCards.size() - 1);
+                }
+                //保存已经编辑的信息
+                else if (resultCode == 2){
+                    savedCard = (MonthlyPlanAdapter.MonthlyCard) data.getSerializableExtra("new_plan");
                 }
                 break;
             case 2:
@@ -140,6 +145,10 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         MAB.setOnClickListener(v -> {
                 Intent intent = new Intent(MonthlyPlanActivity.this, EventAddActivity.class);
                 intent.putExtra("mode", 0);
+                if (savedCard != null){
+                    intent.putExtra("card", savedCard);
+                    savedCard = null;
+                }
                 startActivityForResult(intent,1);
         });
     }
