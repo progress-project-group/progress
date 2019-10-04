@@ -42,13 +42,13 @@ import java.util.Date;
 
 public class EventAddActivity extends AppCompatActivity {
     private int mode;
-    private String title, remark;
+    private String title, remark, target;
     private Date due_date;
     private boolean type;
-    private int progress;
+//    private int progress;
     SimpleDateFormat simpleDateFormat;
-    private TextInputEditText title_text, due_date_text, remark_text;
-    private MaterialTextView progress_text;
+    private TextInputEditText title_text, due_date_text, remark_text, target_text;
+//    private MaterialTextView progress_text;
     private RadioGroup type_radio;
     private FloatingActionButton fab;
     @Override
@@ -61,7 +61,7 @@ public class EventAddActivity extends AppCompatActivity {
         initTollBar();
         initEditText();
         initRadioGroup();
-        initProgressSlider();
+//        initProgressSlider();
         initEditButton();
         initLayout();
     }
@@ -85,11 +85,16 @@ public class EventAddActivity extends AppCompatActivity {
             if (revisedCard.getDue_date() != null){
                 due_date_text.setText(simpleDateFormat.format(revisedCard.getDue_date()));
             }
-            progress_text.setText(revisedCard.getProgress() + "%");
+//            progress_text.setText(revisedCard.getProgress() + "%");
+            if (revisedCard.getN_target() != 0){
+                target_text.setText(String.valueOf(revisedCard.getN_target()));
+            }
             if (!revisedCard.getType()){
                 RadioButton type = findViewById(R.id.complete);
                 type.setChecked(true);
             }
+//            SeekBar seekBar = findViewById(R.id.progress_slider);
+//            seekBar.setProgress(revisedCard.getProgress());
         }
     }
     private void initTollBar(){
@@ -97,12 +102,11 @@ public class EventAddActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {
             Intent intent = new Intent();
-            boolean flag = handleDate(intent);
-            if (mode == 0&&(!title.isEmpty()||!remark.isEmpty()||flag)){
+            boolean flag = handleData(intent);
+            if (mode == 0&&(!title.isEmpty()||!target.isEmpty()||!remark.isEmpty()||flag)){
                 new MaterialAlertDialogBuilder(EventAddActivity.this)
                         .setTitle("是否保存本次编辑")
                         .setPositiveButton("保存",(dialog, which) -> {
-
                             setResult(2, intent);
                             finish();
                         })
@@ -119,13 +123,17 @@ public class EventAddActivity extends AppCompatActivity {
                 //返回给月计划一个新的计划
                 Intent intent = new Intent();
                 //若有数据不合法
-                boolean flag = handleDate(intent);
+                boolean flag = handleData(intent);
                 if (title.isEmpty()){
                     popToast("请输入标题");
                     return false;
                 }
                 else if (!flag){
-                    popToast("请输入截止日期");
+                    popToast("请输入开始日期");
+                    return false;
+                }
+                else if (target != null && target.isEmpty()){
+                    popToast("请输入完成数量");
                     return false;
                 }
                 if (mode == 1){
@@ -142,12 +150,16 @@ public class EventAddActivity extends AppCompatActivity {
         title_text = findViewById(R.id.title);
         due_date_text = findViewById(R.id.due_date);
         remark_text = findViewById(R.id.remark);
+        target_text = findViewById(R.id.n_target);
         //为日期输入框添加日期选择器
         due_date_text.setOnTouchListener((v,event)->{
             if (event.getAction() == MotionEvent.ACTION_DOWN){
-                //关闭软键盘
-                hideSoftInput();
-                showDatePicker(due_date_text);
+                if (due_date_text.isFocused()){
+                    showDatePicker(due_date_text);
+                }
+                else {
+                    due_date_text.requestFocus();
+                }
                 return true;
             }
             return false;
@@ -172,22 +184,22 @@ public class EventAddActivity extends AppCompatActivity {
             }
         }));
     }
-    private void initProgressSlider(){
-        progress_text = findViewById(R.id.progress_text);
-        SeekBar progress = findViewById(R.id.progress_slider);
-        progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress_text.setText(String.valueOf(progress).concat("%"));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-        });
-    }
+//    private void initProgressSlider(){
+//        progress_text = findViewById(R.id.progress_text);
+//        SeekBar progress = findViewById(R.id.progress_slider);
+//        progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                progress_text.setText(String.valueOf(progress).concat("%"));
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) { }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) { }
+//        });
+//    }
 
     //考虑其实用性，暂时不实现
     private void initEditButton() {
@@ -216,7 +228,7 @@ public class EventAddActivity extends AppCompatActivity {
                 }), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
-    private boolean handleDate(Intent intent){
+    private boolean handleData(Intent intent){
         boolean flag = true;
         title = title_text.getText().toString();
         try {
@@ -227,11 +239,23 @@ public class EventAddActivity extends AppCompatActivity {
         remark = remark_text.getText().toString();
         int selectedType = type_radio.getCheckedRadioButtonId();
         type = (selectedType == R.id.separable);
-        String percent = progress_text.getText().toString();
-        progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
+        int int_target;
+        if (type){
+            target = target_text.getText().toString();
+            try {
+                int_target = Integer.parseInt(target);
+            }catch (Exception e){
+                int_target = 0;
+            }
+        }
+        else {
+            int_target = 1;
+        }
+//        String percent = progress_text.getText().toString();
+//        progress = type? Integer.parseInt(percent.substring(0,percent.length()-1)): 0;
         //返回给月计划一个新的计划
         MonthlyPlanAdapter.MonthlyCard newMonthlyCard = new MonthlyPlanAdapter.MonthlyCard
-                (title, due_date, remark, type, progress);
+                (title, due_date, remark, type, int_target);
         intent.putExtra("new_plan",newMonthlyCard);
         return flag;
     }

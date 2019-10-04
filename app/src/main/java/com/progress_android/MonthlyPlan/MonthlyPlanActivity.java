@@ -157,20 +157,11 @@ public class MonthlyPlanActivity extends AppCompatActivity {
         MonthlyPlanAdapter.MonthlyCard a = new
                 MonthlyPlanAdapter.MonthlyCard("AAAaaa",new Date(),"SDAD",true,50);
         monthlyCards.add(a);
-//        MonthlyCard a = new MonthlyCard("a");
-//        MonthlyCard b = new MonthlyCard("b");
-//        MonthlyCard c = new MonthlyCard("c");
-//        MonthlyCard d = new MonthlyCard("d");
-//        MonthlyCard e = new MonthlyCard("e");
-//        monthlyCards.add(a);
-//        monthlyCards.add(b);
-//        monthlyCards.add(c);
-//        monthlyCards.add(d);
-//        monthlyCards.add(e);
-//        for(int i =0;i<100;i++)
-//        {
-//            monthlyCards.add(a);
-//        }
+        a.setN_complete(27);
+        a = new
+                MonthlyPlanAdapter.MonthlyCard("BBBbbb",new Date(),"SDAD",true,50);
+        a.setN_complete(33);
+        monthlyCards.add(a);
     }
 
     private static class MonthlyCardTouchCallBack extends ItemTouchHelper.Callback{

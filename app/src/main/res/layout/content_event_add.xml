@@ -17,9 +17,9 @@
         android:hint="事件名"
         app:endIconMode="clear_text"
         app:startIconContentDescription="event_icon"
-        app:startIconDrawable="@drawable/ic_edit">
+        app:startIconDrawable="@drawable/ic_event">
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/title"
+            android:id= "@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -31,11 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_field_margin"
-        android:hint="计划完成日期">
+        android:hint="计划开始日期"
+        app:startIconContentDescription="date_icon"
+        app:startIconDrawable="@drawable/ic_date">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/due_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:editable="false"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/progress_text"
                 android:layout_width="wrap_content"
@@ -87,6 +90,20 @@
                 android:maxWidth="300dp"
                 android:progress="10"/>
         </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_field_margin"
+            android:hint="请输入要完成的数量">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/n_target"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:counterEnabled="true"
+                app:counterMaxLength="6"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -94,7 +111,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_field_margin"
-        android:hint="备注">
+        android:hint="备注"
+        app:endIconMode="clear_text"
+        app:startIconContentDescription="description_icon"
+        app:startIconDrawable="@drawable/ic_description">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/remark"
             android:layout_width="match_parent"

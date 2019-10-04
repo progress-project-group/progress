@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ProgressBar;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.progress_android.MonthlyPlan.EventAddActivity;
@@ -15,12 +16,14 @@ import com.progress_android.MonthlyPlan.MonthlyPlanActivity;
 import com.progress_android.R;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 enum State{
@@ -39,7 +42,7 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)     {
         Log.d("on", "onCreateViewHolder:"+ parent.getContext().toString());
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.monthly_plan_card, parent,false);
@@ -60,12 +63,12 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MonthlyCard monthlyCard = cards.get(position);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        String date = simpleDateFormat.format(monthlyCard.getDue_date());
         holder.title.setText(monthlyCard.getTitle());
-//        holder.progress.setText(monthlyCard.getProgress()+"%");
-//        holder.type.setText(monthlyCard.getType() ? "可分段":"完整");
-//        holder.remark.setText(monthlyCard.getRemark());
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        holder.due_date.setText(simpleDateFormat.format(monthlyCard.getDue_date()));
+        holder.date.setText(date);
+        holder.progress_bar.setProgress(monthlyCard.getProgress());
+        holder.progress_text.setText("进度："+monthlyCard.getN_complete()+"/"+monthlyCard.getN_target());
     }
     @Override
     public int getItemCount() {
@@ -119,15 +122,15 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder{
         View monthlyCardView;
-        MaterialTextView title, due_date, remark, type, progress;
+        MaterialTextView title, date, remark, type, progress_text;
+        ProgressBar progress_bar;
         public ViewHolder(View itemView){
             super(itemView);
             title = itemView.findViewById(R.id.monthly_plan_title);
+            date = itemView.findViewById(R.id.card_date);
+            progress_text = itemView.findViewById(R.id.card_progress_text);
+            progress_bar = itemView.findViewById(R.id.card_progress_bar);
             monthlyCardView = itemView;
-//            due_date = itemView.findViewById(R.id.monthly_plan_due_date);
-//            remark = itemView.findViewById(R.id.monthly_plan_remark);
-//            type = itemView.findViewById(R.id.monthly_plan_type);
-//            progress = itemView.findViewById(R.id.monthly_plan_progress);
         }
     }
 
@@ -136,14 +139,16 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
         private Date due_date;
         private String remark;
         private boolean type;
-        private int progress;
+        private int n_target;
+        private int n_complete;
         private State state;
-        public MonthlyCard(String title ,Date due_date, String remark, boolean type ,int progress){
+        public MonthlyCard(String title ,Date due_date, String remark, boolean type ,int n_target){
             this.title = title;
             this.due_date = due_date;
             this.remark = remark;
             this.type = type;
-            this.progress = progress;
+            this.n_target = n_target;
+            this.n_complete = 0;
             state = State.NOTSTARTED;
         }
 
@@ -152,10 +157,17 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
             return title;
         }
         public int getProgress() {
-            return progress;
+
+            return (int)((float)n_complete/(float)n_target * 100);
         }
         public Date getDue_date() {
             return due_date;
+        }
+        public int getN_complete() {
+            return n_complete;
+        }
+        public int getN_target() {
+            return n_target;
         }
         public String getRemark() {
             return remark;
@@ -170,8 +182,11 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
         public void setDue_date(Date due_date) {
             this.due_date = due_date;
         }
-        public void setProgress(int progress) {
-            this.progress = progress;
+        public void setN_target(int n_target) {
+            this.n_target = n_target;
+        }
+        public void setN_complete(int n_complete) {
+            this.n_complete = n_complete;
         }
         public void setRemark(String remark) {
             this.remark = remark;
@@ -186,14 +201,14 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
             this.state = state;
         }
 
-        public void setAllExceptState(String title ,Date due_date, String remark, boolean type ,int progress){
-            setDue_date(due_date);
-            setProgress(progress);
-            setDue_date(due_date);
-            setRemark(remark);
-            setTitle(title);
-            setType(type);
-        }
+//        public void setAllExceptState(String title ,Date due_date, String remark, boolean type ,int progress){
+//            setDue_date(due_date);
+//            setProgress(progress);
+//            setDue_date(due_date);
+//            setRemark(remark);
+//            setTitle(title);
+//            setType(type);
+//        }
     }
 }
 
