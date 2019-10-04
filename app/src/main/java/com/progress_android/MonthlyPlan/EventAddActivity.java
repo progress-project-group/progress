@@ -132,7 +132,7 @@ public class EventAddActivity extends AppCompatActivity {
                     popToast("请输入开始日期");
                     return false;
                 }
-                else if (target != null && target.isEmpty()){
+                else if (target.isEmpty()){
                     popToast("请输入完成数量");
                     return false;
                 }
@@ -240,6 +240,7 @@ public class EventAddActivity extends AppCompatActivity {
         int selectedType = type_radio.getCheckedRadioButtonId();
         type = (selectedType == R.id.separable);
         int int_target;
+        target = "";
         if (type){
             target = target_text.getText().toString();
             try {
