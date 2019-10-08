@@ -10,18 +10,18 @@ public class LongTermDataBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "longTermSchedule.db";
     private static final String LONG_TERM_TABLE_CREATE = "CREATE TABLE "+ LongTermTable.NAME + "(" +
-            "_id integer primary key autoincrement, "+
+            //"_id integer primary key autoincrement, "+
             LongTermTable.Cols.DATE + ","+
             LongTermTable.Cols.INDEX+ ","+
             LongTermTable.Cols.NAME+","+
-            LongTermTable.Cols.UUID +
+            LongTermTable.Cols.UUID + " primary key " +
             ")";
     private static final String SUB_LONG_TERM_TABLE_CREATE = "CREATE TABLE " + SubLongTermTable.NAME +"("+
             "_id integer primary key autoincrement, "+
-            SubLongTermTable.Cols.UUID + "," +
+            SubLongTermTable.Cols.UUID + " REFERENCES " + LongTermTable.NAME + "(" + LongTermTable.Cols.UUID +")"+ "ON DELETE CASCADE"+ "," +
             SubLongTermTable.Cols.FINISHED + "," +
             SubLongTermTable.Cols.PERCENT + "," +
-            SubLongTermTable.Cols.SUB_UUID + "," +
+            SubLongTermTable.Cols.SUB_UUID + ","+
             SubLongTermTable.Cols.TITLE +
             ")";
 
@@ -33,6 +33,14 @@ public class LongTermDataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(LONG_TERM_TABLE_CREATE);
         db.execSQL(SUB_LONG_TERM_TABLE_CREATE);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase database){
+        super.onOpen(database);
+        if(!database.isReadOnly()){
+            database.execSQL("PRAGMA foreign_keys = ON");
+        }
     }
 
     @Override
