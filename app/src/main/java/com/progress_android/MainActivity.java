@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.progress_android.MonthlyPlan.MonthlyPlanActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.progress_android.DailyPlanActivity.TODAY;
@@ -73,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
         //月计划
         Button MonthlyPlanTestButton = (Button) findViewById(R.id.MonthlyPlanTestButton);
-        FragmentTestButton.setOnClickListener(new View.OnClickListener() {
+        MonthlyPlanTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
+                Intent intent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
                 startActivity(intent);
             }
         });

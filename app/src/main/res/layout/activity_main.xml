@@ -35,4 +35,10 @@
         android:text="LongTermTest"
         android:id="@+id/LongTermScheduleTestButton"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/MonthlyPlanButton"
+        android:id="@+id/MonthlyPlanTestButton"/>
+
 </LinearLayout>

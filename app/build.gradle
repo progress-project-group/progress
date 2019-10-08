@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.progress_android"
-        minSdkVersion 24
+        minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -23,7 +23,7 @@ android {
                             'src/main/res/layout/fragment_summary',
                             'src/main/res/layout/activity_eventlist',
                             'src/main/res/layout/activity_timeline',
-
+                            'src/main/res/layout/activity_monthly',
                             'src/main/res/layout',
                             'src/main/res'
                     ]
