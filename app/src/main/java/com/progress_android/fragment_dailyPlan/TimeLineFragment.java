@@ -14,18 +14,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.progress_android.DailyPlanActivity;
 import com.progress_android.R;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.TimeLineAdapter;
-import DataBase.DataBaseHelper;
+import DataBase.DailyPlanDataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Item.ItemInTimeline;
 import Item.Time.MyTime;
-import Item.Time.TimeAmount;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -97,7 +94,7 @@ public class TimeLineFragment extends Fragment {
 
     public void initItemList(Context context) {
         Log.d(TAG,"initEventList");
-        DataBaseHelper dbHelper = new DataBaseHelper(context);
+        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(
