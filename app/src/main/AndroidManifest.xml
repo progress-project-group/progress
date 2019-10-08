@@ -11,6 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+<!--        <activity-->
+<!--            android:name=".MonthlyPlan.EventAddActivity"-->
+<!--            android:theme="@style/MonthlyTheme"></activity>-->
+<!--        <activity-->
+<!--            android:name=".MonthlyPlan.MonthlyPlanActivity"-->
+<!--            android:theme="@style/MonthlyTheme" />-->
+<!--        <activity android:name=".LongTermSchedulePagerActivity" android:parentActivityName=".LongTermScheduleListActivity"></activity>-->
+<!--        <activity android:name=".LongTermScheduleListActivity" android:parentActivityName=".MainActivity" />-->
         <activity android:name=".DailySummaryActivity"></activity>
         <activity android:name=".DailyPlanActivity" />
         <activity android:name=".EventListActivity" />

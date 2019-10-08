@@ -3,16 +3,17 @@ package Item;
 import java.util.ArrayList;
 import java.util.List;
 
+//用于生成本日ExecuedItem的时间轴
 public class ExecutedItemList {
     List<ExecutedItem> executedItemList = new ArrayList<>();
     ExecutedItem currentItem = null;
     ExecutedItem firstItem = null;
 
     public ExecutedItemList(){
-
+        //该类通过addOrderPoint与addExecutedItem为ExecutedItem添加next项
     }
 
-    //该函数在为一已有项添加开始与结束时间时需要用到
+    //该函数在为一已有项添加时间段时需要用到
     public void addOrderPoint(ExecutedItem executedItem){
         if(currentItem!=null) {
             currentItem.addNext(executedItem);

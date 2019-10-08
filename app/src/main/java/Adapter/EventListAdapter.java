@@ -56,8 +56,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import Item.Item;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder>
-        implements DraggableItemAdapter<EventListAdapter.ViewHolder>,
-                    SwipeableItemAdapter<EventListAdapter.ViewHolder>{
+        implements DraggableItemAdapter<EventListAdapter.ViewHolder>{
 
     private List<EventItem> eventList;
     private String TAG = "EventListAdapter";
@@ -125,37 +124,37 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         notifyDataSetChanged();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return eventList.get(position).id;
-    }
-
-
-    //SwipeFunction
-
-    @Override
-    public int onGetSwipeReactionType(@NonNull ViewHolder holder, int position, int x, int y) {
-        return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
-    }
-
-    @Override
-    public void onSwipeItemStarted(@NonNull ViewHolder holder, int position) {
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onSetSwipeBackground(@NonNull ViewHolder holder, int position, int type) {
-    }
-
-    @Nullable
-    @Override
-    public SwipeResultAction onSwipeItem(@NonNull ViewHolder holder, int position, int result) {
-        if(result == SwipeableItemConstants.RESULT_SWIPED_RIGHT){
-            return new SwipeResultActionDefault();
-        }else{
-            return new SwipeResultActionDoNothing();
-        }
-    }
+//    @Override
+//    public long getItemId(int position) {
+//        return eventList.get(position).id;
+//    }
+//
+//
+//    //SwipeFunction
+//
+//    @Override
+//    public int onGetSwipeReactionType(@NonNull ViewHolder holder, int position, int x, int y) {
+//        return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
+//    }
+//
+//    @Override
+//    public void onSwipeItemStarted(@NonNull ViewHolder holder, int position) {
+//        notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void onSetSwipeBackground(@NonNull ViewHolder holder, int position, int type) {
+//    }
+//
+//    @Nullable
+//    @Override
+//    public SwipeResultAction onSwipeItem(@NonNull ViewHolder holder, int position, int result) {
+//        if(result == SwipeableItemConstants.RESULT_SWIPED_RIGHT){
+//            return new SwipeResultActionDefault();
+//        }else{
+//            return new SwipeResultActionDoNothing();
+//        }
+//    }
 
 
     //ViewHolder
@@ -227,11 +226,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         }
 
         Log.d(TAG, "setType");
-        holder.type_button.setBackgroundResource(Item.iconId[eventItem.getVariety()]);
+        if(eventItem.getVariety()!=Item.NONE) {
+            holder.type_button.setBackgroundResource(Item.iconId[eventItem.getVariety()]);
+        }
     }
 
 
-    static class ViewHolder extends AbstractDraggableSwipeableItemViewHolder {
+    static class ViewHolder extends AbstractDraggableItemViewHolder {
         private EditText eventContent;
         public TextView eventPriority;
         public View dragHandle;
@@ -257,14 +258,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tomato[4] = (ImageView) view.findViewById(R.id.tomato5);
             tomato[5] = (ImageView) view.findViewById(R.id.tomato6);
 
-            containerView = (FrameLayout) view.findViewById(R.id.container);
+            //containerView = (FrameLayout) view.findViewById(R.id.container);
         }
 
-        @NonNull
-        @Override
-        public View getSwipeableContainerView() {
-            return containerView;
-        }
+//        @NonNull
+//        @Override
+//        public View getSwipeableContainerView() {
+//            return containerView;
+//        }
     }
 
     @Override

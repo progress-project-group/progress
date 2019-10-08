@@ -8,9 +8,13 @@ import java.util.List;
 import Item.Time.TimeAmount;
 
 public class TypeItem{
+    //同种类的事件list
     List<ExecutedItem> executedItemList = new ArrayList<>();
+    //事件种类id
     int type;
+    //事件种类
     String content;
+    //事件的代表颜色
     int colorId;
 
     public TypeItem(int type){
