@@ -24,6 +24,7 @@ android {
                             'src/main/res/layout/activity_eventlist',
                             'src/main/res/layout/activity_timeline',
                             'src/main/res/layout/activity_monthly',
+                            'src/main/res/layout/activity_longTerm',
                             'src/main/res/layout',
                             'src/main/res'
                     ]

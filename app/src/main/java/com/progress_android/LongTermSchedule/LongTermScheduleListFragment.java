@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.LongTermSchedule;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.progress_android.R;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -20,9 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import Item.LongTermSchedule;
-import Item.LongTermScheduleList;
-import Item.subLongTermSchedule;
+import Item.LongTermSchedule.LongTermSchedule;
+import Item.LongTermSchedule.LongTermScheduleList;
+import Item.LongTermSchedule.subLongTermSchedule;
 
 
 public class LongTermScheduleListFragment extends Fragment {

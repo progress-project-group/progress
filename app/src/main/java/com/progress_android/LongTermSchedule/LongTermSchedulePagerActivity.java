@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.LongTermSchedule;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,11 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.progress_android.R;
+
 import java.util.List;
 import java.util.UUID;
 
-import Item.LongTermSchedule;
-import Item.LongTermScheduleList;
+import Item.LongTermSchedule.LongTermSchedule;
+import Item.LongTermSchedule.LongTermScheduleList;
 
 public class LongTermSchedulePagerActivity extends AppCompatActivity {
 

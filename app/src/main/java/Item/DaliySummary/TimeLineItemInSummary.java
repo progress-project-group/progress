@@ -1,8 +1,9 @@
-package Item;
+package Item.DaliySummary;
 
+import Item.Item;
 import Item.Time.MyTime;
 
-public class TimeLineItemInSummary extends Item{
+public class TimeLineItemInSummary extends Item {
     MyTime startTime;
     MyTime endTime;
 

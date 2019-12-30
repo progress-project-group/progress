@@ -1,6 +1,8 @@
-package com.progress_android;
+package com.progress_android.LongTermSchedule;
 
 import android.os.Bundle;
+
+import com.progress_android.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;

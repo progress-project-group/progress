@@ -2,7 +2,7 @@ package com.progress_android;
 
 import Adapter.TimeLineAdapter;
 import Dialog.StartTimeSettingDialog;
-import Item.ItemInTimeline;
+import Item.DaliyPlan.ItemInTimeline;
 import Item.Time.MyTime;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

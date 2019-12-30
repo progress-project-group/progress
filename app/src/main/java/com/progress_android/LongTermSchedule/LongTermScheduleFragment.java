@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.LongTermSchedule;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,9 +34,9 @@ import java.util.UUID;
 
 import Dialog.DatePickerFragment;
 import Dialog.SubLongTermScheduleDialog;
-import Item.LongTermSchedule;
-import Item.LongTermScheduleList;
-import Item.subLongTermSchedule;
+import Item.LongTermSchedule.LongTermSchedule;
+import Item.LongTermSchedule.LongTermScheduleList;
+import Item.LongTermSchedule.subLongTermSchedule;
 
 public class LongTermScheduleFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package Item;
+package Item.LongTermSchedule;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -2,8 +2,6 @@ package Item;
 
 import com.progress_android.R;
 
-import Item.Time.TimeAmount;
-
 /**
  * Created by Yamaa on 2019/3/20.
  */

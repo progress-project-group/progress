@@ -1,9 +1,6 @@
-package com.progress_android;
+package com.progress_android.LongTermSchedule;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
 
 public class LongTermScheduleListActivity extends SingleFragmentActivity {
 

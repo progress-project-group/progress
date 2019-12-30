@@ -22,7 +22,7 @@ import Adapter.EventListAdapter;
 import DataBase.DailyPlanDataBaseHelper;
 import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
-import Item.EventItem;
+import Item.DaliyPlan.EventItem;
 import Item.Time.Pomodoro;
 import Item.Time.TimeAmount;
 import androidx.annotation.NonNull;

@@ -24,11 +24,10 @@ import Dialog.StartTimeSettingDialog;
 
 import java.util.List;
 
-import Item.ItemInTimeline;
+import Item.DaliyPlan.ItemInTimeline;
 import Item.Time.MyTime;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 
 

@@ -2,7 +2,7 @@ package com.progress_android;
 
 import Adapter.EventListAdapter;
 import Dialog.AddEventDialogFragment;
-import Item.EventItem;
+import Item.DaliyPlan.EventItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;

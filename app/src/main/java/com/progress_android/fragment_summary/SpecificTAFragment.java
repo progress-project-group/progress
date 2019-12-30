@@ -3,9 +3,8 @@ package com.progress_android.fragment_summary;
 
 import android.os.Bundle;
 
-import Item.ExecutedItem;
-import Item.ExecutedItemList;
-import Item.TypeItem;
+import Item.DaliyPlan.ExecutedItem;
+import Item.DaliyPlan.TypeItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -24,13 +22,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
 import Item.Item;
-import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.List;
 

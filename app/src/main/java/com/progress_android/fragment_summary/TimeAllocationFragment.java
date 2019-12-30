@@ -1,24 +1,19 @@
 package com.progress_android.fragment_summary;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
 import Item.Item;
-import Item.Time.TimeAmount;
-import Item.ExecutedItemList;
-import Item.TypeItem;
+import Item.DaliyPlan.ExecutedItemList;
+import Item.DaliyPlan.TypeItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -29,15 +24,12 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.progress_android.DailySummaryActivity;
 import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 import static com.progress_android.DailySummaryActivity.tfLight;
 import static com.progress_android.DailySummaryActivity.tfRegular;
 

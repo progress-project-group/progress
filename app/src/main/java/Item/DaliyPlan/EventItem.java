@@ -1,5 +1,6 @@
-package Item;
+package Item.DaliyPlan;
 
+import Item.Item;
 import Item.Time.TimeAmount;
 
 public class EventItem extends Item{

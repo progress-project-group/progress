@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LongTermSchedulePagerActivity">
-    <androidx.viewpager.widget.ViewPager
+    tools:context=".LongTermSchedule.LongTermScheduleListActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/longTermSchedulePager">
+        android:id="@+id/LongTermScheduleListRecyclerView">
 
-    </androidx.viewpager.widget.ViewPager>
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

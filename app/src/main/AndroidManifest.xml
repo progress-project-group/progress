@@ -17,8 +17,8 @@
         <activity
             android:name=".MonthlyPlan.MonthlyPlanActivity"
             android:theme="@style/MonthlyTheme" />
-        <activity android:name=".LongTermSchedulePagerActivity" android:parentActivityName=".LongTermScheduleListActivity"></activity>
-        <activity android:name=".LongTermScheduleListActivity" android:parentActivityName=".MainActivity" />
+        <activity android:name=".LongTermSchedule.LongTermSchedulePagerActivity" android:parentActivityName=".LongTermSchedule.LongTermScheduleListActivity"></activity>
+        <activity android:name=".LongTermSchedule.LongTermScheduleListActivity" android:parentActivityName=".MainActivity" />
         <activity android:name=".DailySummaryActivity"></activity>
         <activity android:name=".DailyPlanActivity" />
         <activity android:name=".EventListActivity" />

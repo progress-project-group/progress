@@ -1,6 +1,8 @@
-package Item;
+package Item.LongTermSchedule;
 
 import java.util.UUID;
+
+import Item.Item;
 
 public class subLongTermSchedule {
     private String mTitle;

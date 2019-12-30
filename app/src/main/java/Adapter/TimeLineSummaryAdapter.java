@@ -1,30 +1,21 @@
 package Adapter;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.progress_android.R;
-import Dialog.StartTimeSettingDialog;
 
 import java.util.List;
 
-import Item.TimeLineItemInSummary;
+import Item.DaliySummary.TimeLineItemInSummary;
 import Item.Item;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
 
 public class TimeLineSummaryAdapter extends RecyclerView.Adapter<TimeLineSummaryAdapter.ViewHolder>{
     private List<TimeLineItemInSummary> itemList;

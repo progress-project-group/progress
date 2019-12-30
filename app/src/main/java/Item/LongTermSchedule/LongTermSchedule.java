@@ -1,7 +1,6 @@
-package Item;
+package Item.LongTermSchedule;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,8 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import DataBase.LongTermDataBaseHelper;
-import DataBase.LongTermScheduleSchema;
 import DataBase.LongTermScheduleSchema.SubLongTermTable;
 
 public class LongTermSchedule {

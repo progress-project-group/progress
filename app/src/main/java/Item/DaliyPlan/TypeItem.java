@@ -1,10 +1,9 @@
-package Item;
-
-import com.progress_android.R;
+package Item.DaliyPlan;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Item.Item;
 import Item.Time.TimeAmount;
 
 public class TypeItem{
