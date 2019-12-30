@@ -12,6 +12,8 @@ import com.progress_android.MonthlyPlan.MonthlyPlanActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.progress_android.DailyPlanActivity.TODAY;
+
 public class MainActivity extends AppCompatActivity {
     String TAG = "main_activity";
 
@@ -48,16 +50,36 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
                 Log.d(TAG,"startFragmentTestActivity");
+                intent.putExtra("PLANID", TODAY);
+                startActivity(intent);
+            }
+        });
+
+        Button SummaryTestButton = (Button) findViewById(R.id.SummaryTestButton);
+        SummaryTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,DailySummaryActivity.class);
+                Log.d(TAG,"startSummaryTestActivity");
+                startActivity(intent);
+            }
+        });
+
+        Button LongTermTestButton = (Button) findViewById(R.id.LongTermScheduleTestButton);
+        LongTermTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LongTermScheduleListActivity.class);
                 startActivity(intent);
             }
         });
 
         //月计划
         Button MonthlyPlanTestButton = (Button) findViewById(R.id.MonthlyPlanTestButton);
-        FragmentTestButton.setOnClickListener(new View.OnClickListener() {
+        MonthlyPlanTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
+                Intent intent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
                 startActivity(intent);
             }
         });

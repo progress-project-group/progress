@@ -20,7 +20,6 @@ import android.os.Bundle;
 import com.progress_android.fragment_summary.LongTermCompareFragment;
 import com.progress_android.fragment_summary.SpecificTAFragment;
 import com.progress_android.fragment_summary.TimeAllocationFragment;
-import com.progress_android.fragment_summary.TimeLineFragement;
 
 import java.util.ArrayList;
 import java.util.List;
