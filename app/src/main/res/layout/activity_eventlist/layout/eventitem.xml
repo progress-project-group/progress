@@ -105,26 +105,26 @@
             android:layout_margin="5dp"
             >
             <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/type_button"
-                android:layout_margin="10dp"
+                android:layout_margin="3dp"
                 android:id="@+id/event_type_button"
                 android:layout_gravity="center"
                 />
             <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/tomato_button"
                 android:id="@+id/event_tomato_button"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
+                android:layout_margin="3dp"
                 />
             <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/delete_button"
-                android:layout_margin="10dp"
+                android:layout_margin="3dp"
                 android:id="@+id/event_delete_button"
                 android:layout_gravity="center"
                 />

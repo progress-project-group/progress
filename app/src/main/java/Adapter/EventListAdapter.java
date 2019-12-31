@@ -23,13 +23,24 @@ import com.bigkoo.pickerview.listener.CustomListener;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemConstants;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultAction;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionDefault;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionDoNothing;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionMoveToSwipedDirection;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
+import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeableItemViewHolder;
 import com.progress_android.DailyPlanActivity;
 import com.progress_android.R;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,11 +51,13 @@ import Item.Time.TimeAmount;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import Item.Item;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder>
-        implements DraggableItemAdapter<EventListAdapter.ViewHolder>{
+        implements DraggableItemAdapter<EventListAdapter.ViewHolder>,
+        SwipeableItemAdapter<EventListAdapter.ViewHolder>{
 
     private List<EventItem> eventList;
     private String TAG = "EventListAdapter";
@@ -112,37 +125,37 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public long getItemId(int position) {
-//        return eventList.get(position).id;
-//    }
-//
-//
-//    //SwipeFunction
-//
-//    @Override
-//    public int onGetSwipeReactionType(@NonNull ViewHolder holder, int position, int x, int y) {
-//        return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
-//    }
-//
-//    @Override
-//    public void onSwipeItemStarted(@NonNull ViewHolder holder, int position) {
-//        notifyDataSetChanged();
-//    }
-//
-//    @Override
-//    public void onSetSwipeBackground(@NonNull ViewHolder holder, int position, int type) {
-//    }
-//
-//    @Nullable
-//    @Override
-//    public SwipeResultAction onSwipeItem(@NonNull ViewHolder holder, int position, int result) {
-//        if(result == SwipeableItemConstants.RESULT_SWIPED_RIGHT){
-//            return new SwipeResultActionDefault();
-//        }else{
-//            return new SwipeResultActionDoNothing();
-//        }
-//    }
+    @Override
+    public long getItemId(int position) {
+        return eventList.get(position).id;
+    }
+
+
+    //SwipeFunction
+
+    @Override
+    public int onGetSwipeReactionType(@NonNull ViewHolder holder, int position, int x, int y) {
+        return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
+    }
+
+    @Override
+    public void onSwipeItemStarted(@NonNull ViewHolder holder, int position) {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSetSwipeBackground(@NonNull ViewHolder holder, int position, int type) {
+    }
+
+    @Nullable
+    @Override
+    public SwipeResultAction onSwipeItem(@NonNull ViewHolder holder, int position, int result) {
+        if(result == SwipeableItemConstants.RESULT_SWIPED_RIGHT){
+            return new SwipeResultActionDefault();
+        }else{
+            return new SwipeResultActionDoNothing();
+        }
+    }
 
 
     //ViewHolder
@@ -220,7 +233,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
 
-    static class ViewHolder extends AbstractDraggableItemViewHolder {
+    static class ViewHolder extends AbstractDraggableSwipeableItemViewHolder {
         private EditText eventContent;
         public TextView eventPriority;
         public View dragHandle;
@@ -246,14 +259,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tomato[4] = (ImageView) view.findViewById(R.id.tomato5);
             tomato[5] = (ImageView) view.findViewById(R.id.tomato6);
 
-            //containerView = (FrameLayout) view.findViewById(R.id.container);
+            containerView = (FrameLayout) view.findViewById(R.id.container);
         }
 
-//        @NonNull
-//        @Override
-//        public View getSwipeableContainerView() {
-//            return containerView;
-//        }
+        @NonNull
+        @Override
+        public View getSwipeableContainerView() {
+            return containerView;
+        }
     }
 
     @Override
