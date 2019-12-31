@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">progress_Android</string>
+    <string name="TimeLineTest">TimeLine</string>
+    <string name="MonthlyPlanButton">MonthlyPlanButton</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+</resources>
