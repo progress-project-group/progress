@@ -40,7 +40,7 @@ public class MonthlyPlanAdapter extends RecyclerView.Adapter<MonthlyPlanAdapter.
         this.sourceCards = cards;
         this.context = context;
     }
-
+    
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)     {
         Log.d("on", "onCreateViewHolder:"+ parent.getContext().toString());
