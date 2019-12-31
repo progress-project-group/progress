@@ -146,7 +146,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         holder.timePointImage.setImageResource(imageId);
 
         Log.d(TAG, "setType");
-        holder.typeChooseButton.setBackgroundResource(Item.iconId[itemInTimeline.getVariety()]);
+        if(itemInTimeline.getVariety()!=Item.NONE) {
+            holder.typeChooseButton.setBackgroundResource(Item.iconId[itemInTimeline.getVariety()]);
+        }
 
         /*修改时间轴颜色、长度
         LinearLayout.LayoutParams timeAmountLayoutParams = (LinearLayout.LayoutParams) holder.timeAmount.getLayoutParams();

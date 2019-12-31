@@ -23,7 +23,6 @@ import DataBase.FeedReaderContract;
 import Dialog.AddEventDialogFragment;
 import Item.DaliyPlan.ItemInTimeline;
 import Item.Time.MyTime;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;

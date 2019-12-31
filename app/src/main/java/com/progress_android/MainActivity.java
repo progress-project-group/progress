@@ -83,24 +83,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        Button LongTermTestButton = (Button) findViewById(R.id.LongTermScheduleTestButton);
-        LongTermTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LongTermScheduleListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //月计划
-        Button MonthlyPlanTestButton = (Button) findViewById(R.id.MonthlyPlanTestButton);
-        MonthlyPlanTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
