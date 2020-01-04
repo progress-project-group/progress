@@ -30,7 +30,7 @@ import Item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.progress_android.DailySummaryActivity.tfLight;
+import static com.progress_android.fragment_summary.DailySummaryActivity.tfLight;
 
 /**
  * A simple {@link Fragment} subclass.

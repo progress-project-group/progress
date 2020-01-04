@@ -7,22 +7,31 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DailyPlanDataBaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "DailyPlan.db";
-    private static final String TIMELINE_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.TimeLineData.TABLE_NAME + " (" +
-            FeedReaderContract.TimeLineData._ID + " INTEGER PRIMARY KEY," +
-            FeedReaderContract.TimeLineData.COLUMN_CONTENT + " TEXT," +
-            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
-            FeedReaderContract.TimeLineData.COLUMN_HOUR + " INTEGER,"+
-            FeedReaderContract.TimeLineData.COLUMN_MINS + " INTEGER)";
-    private static final String EVENTLIST_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.EventListData.TABLE_NAME + " (" +
-            FeedReaderContract.EventListData._ID + " INTEGER PRIMARY KEY," +
-            FeedReaderContract.EventListData.COLUMN_CONTENT + " TEXT," +
-            FeedReaderContract.TimeLineData.COLUMN_TYPE + " INTEGER,"+
-            FeedReaderContract.EventListData.COLUMN_PORNUMS + " INTEGER," +
-            FeedReaderContract.EventListData.COLUMN_WORK + " INTEGER," +
-            FeedReaderContract.EventListData.COLUMN_RELAX + " INTEGER)";
-    private static final String Time_TABLE_CREATE = "CREATE TABLE " + FeedReaderContract.Time.TABLE_NAME + "(" +
-            FeedReaderContract.Time._ID + "INITEGER PRIMARY KEY," +
-            FeedReaderContract.Time.COLUMN_TIME + " TEXT)";
+    private static final String TIMELINE_TABLE_CREATE = "CREATE TABLE " + DailyPlanDbSchema.TimeLineData.TABLE_NAME + " (" +
+            DailyPlanDbSchema.TimeLineData._ID + " INTEGER PRIMARY KEY," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_CONTENT + " TEXT," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_TYPE + " INTEGER,"+
+            DailyPlanDbSchema.TimeLineData.COLUMN_HOUR + " INTEGER,"+
+            DailyPlanDbSchema.TimeLineData.COLUMN_MINS + " INTEGER," +
+            DailyPlanDbSchema.EventListData.COLUMN_STATUS + " INTEGER," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_STARTTIME + " TEXT," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_ENDTIME + " TEXT," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_NEXT + " TEXT)";
+    private static final String EVENTLIST_TABLE_CREATE = "CREATE TABLE " + DailyPlanDbSchema.EventListData.TABLE_NAME + " (" +
+            DailyPlanDbSchema.EventListData._ID + " INTEGER PRIMARY KEY," +
+            DailyPlanDbSchema.EventListData.COLUMN_PRIORITY + " INTEGER,"+
+            DailyPlanDbSchema.EventListData.COLUMN_CONTENT + " TEXT," +
+            DailyPlanDbSchema.EventListData.COLUMN_TYPE + " INTEGER,"+
+            DailyPlanDbSchema.EventListData.COLUMN_PORNUMS + " INTEGER," +
+            DailyPlanDbSchema.EventListData.COLUMN_WORK + " INTEGER," +
+            DailyPlanDbSchema.EventListData.COLUMN_RELAX + " INTEGER," +
+            DailyPlanDbSchema.EventListData.COLUMN_STATUS + " INTEGER," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_STARTTIME + " TEXT," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_ENDTIME + " TEXT," +
+            DailyPlanDbSchema.TimeLineData.COLUMN_NEXT + " TEXT)";
+    private static final String Time_TABLE_CREATE = "CREATE TABLE " + DailyPlanDbSchema.Time.TABLE_NAME + "(" +
+            DailyPlanDbSchema.Time._ID + "INITEGER PRIMARY KEY," +
+            DailyPlanDbSchema.Time.COLUMN_TIME + " TEXT)";
 
 
     public DailyPlanDataBaseHelper(Context context){

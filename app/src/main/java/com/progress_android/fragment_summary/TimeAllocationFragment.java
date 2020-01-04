@@ -30,8 +30,8 @@ import com.progress_android.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.progress_android.DailySummaryActivity.tfLight;
-import static com.progress_android.DailySummaryActivity.tfRegular;
+import static com.progress_android.fragment_summary.DailySummaryActivity.tfLight;
+import static com.progress_android.fragment_summary.DailySummaryActivity.tfRegular;
 
 
 public class TimeAllocationFragment extends Fragment {

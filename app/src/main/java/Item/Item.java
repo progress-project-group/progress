@@ -22,6 +22,15 @@ public abstract class Item {
     public static final int typeIconId = R.drawable.type_button;
     public static final String none = "无";
 
+    public static final String[] statusText = new String[]{"等待", "进行中", "已完成", "暂停", "已取消"};
+    public static final int COMPLETED = 2;
+    public static final int DOING = 1;
+    public static final int WAITING = 0;
+    public static final int PAUSE = 3;
+    public static final int CANCEL = 4;
+
+    private int status = WAITING;
+
     private String content;
     int type;
 
@@ -55,5 +64,13 @@ public abstract class Item {
             return typeIconId;
         }
         return iconId[type];
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

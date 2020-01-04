@@ -26,6 +26,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="ExecutedPlan"
+        android:id="@+id/ExecuteTestButton"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="SummaryTest"
         android:id="@+id/SummaryTestButton"/>
 

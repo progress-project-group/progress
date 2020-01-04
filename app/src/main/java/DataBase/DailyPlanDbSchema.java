@@ -2,8 +2,8 @@ package DataBase;
 
 import android.provider.BaseColumns;
 
-public class FeedReaderContract {
-    private FeedReaderContract(){}
+public class DailyPlanDbSchema {
+    private DailyPlanDbSchema(){}
 
     public static class Time implements  BaseColumns{
         public static final String TABLE_NAME = "Date";
@@ -19,11 +19,17 @@ public class FeedReaderContract {
         public static final String COLUMN_CONTENT = "Content";
         //记录计划种类
         public static final String COLUMN_TYPE = "Type";
+
+        public static final String COLUMN_STATUS = "Status";
+        public static final String COLUMN_STARTTIME = "StartTime";
+        public static final String COLUMN_ENDTIME = "EndTime";
+        public static final String COLUMN_NEXT = "Next";
     }
 
     public static class EventListData implements BaseColumns{
         public static final String TABLE_NAME = "EventListData";
         //番茄钟数以及每个番茄钟的工作与休息时间
+        public static final String COLUMN_PRIORITY = "Priority";
         public static final String COLUMN_PORNUMS = "PorNums";
         public static final String COLUMN_WORK = "Work";
         public static final String COLUMN_RELAX = "Relax";
@@ -31,5 +37,10 @@ public class FeedReaderContract {
         public static final String COLUMN_CONTENT = "Content";
         //时间类别
         public static final String COLUMN_TYPE = "Type";
+
+        public static final String COLUMN_STATUS = "Status";
+        public static final String COLUMN_STARTTIME = "StartTime";
+        public static final String COLUMN_ENDTIME = "EndTime";
+        public static final String COLUMN_NEXT = "Next";
     }
 }

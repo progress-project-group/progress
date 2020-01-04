@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
-import com.progress_android.DailyPlanActivity;
 import com.progress_android.R;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import Adapter.EventListAdapter;
 import DataBase.DailyPlanDataBaseHelper;
-import DataBase.FeedReaderContract;
+import DataBase.DailyPlanDbSchema;
 import Dialog.AddEventDialogFragment;
 import Item.DaliyPlan.EventItem;
 import Item.Time.Pomodoro;
@@ -97,7 +96,7 @@ public class EventListFragment extends Fragment{
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(
-                FeedReaderContract.EventListData.TABLE_NAME,   // The table to query
+                DailyPlanDbSchema.EventListData.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
                 null,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
@@ -107,11 +106,11 @@ public class EventListFragment extends Fragment{
         );
 
         while(cursor.moveToNext()) {
-            String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_CONTENT));
-            int type = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_TYPE));
-            int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_PORNUMS));
-            int work = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_WORK));
-            int relax = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.EventListData.COLUMN_RELAX));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_CONTENT));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_TYPE));
+            int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS));
+            int work = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_WORK));
+            int relax = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_RELAX));
 
             EventItem item = new EventItem( content,new TimeAmount(new Pomodoro(work, relax), porNums), type);
             eventList.add(item);
@@ -131,13 +130,14 @@ public class EventListFragment extends Fragment{
         for(int i=0;i<eventList.size();++i){
             EventItem item = eventList.get(i);
             ContentValues values = new ContentValues();
-            values.put(FeedReaderContract.EventListData.COLUMN_CONTENT,item.getContent());
-            values.put(FeedReaderContract.EventListData.COLUMN_TYPE, item.getVariety());
-            values.put(FeedReaderContract.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
-            values.put(FeedReaderContract.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
-            values.put(FeedReaderContract.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_PRIORITY, i);
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_CONTENT,item.getContent());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_TYPE, item.getVariety());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
             Log.d(TAG, "saveData" + values);
-            db.insert(FeedReaderContract.EventListData.TABLE_NAME, null,values);
+            db.insert(DailyPlanDbSchema.EventListData.TABLE_NAME, null,values);
         }
     }
 

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.progress_android"
-        minSdkVersion 15
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -25,6 +25,7 @@ android {
                             'src/main/res/layout/activity_timeline',
                             'src/main/res/layout/activity_monthly',
                             'src/main/res/layout/activity_longTerm',
+                            'src/main/res/layout/ImplementPlan',
                             'src/main/res/layout',
                             'src/main/res'
                     ]
@@ -52,4 +53,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'com.contrarywind:Android-PickerView:4.1.7'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    compile ('jameson.io.library:library:0.0.1') {
+        exclude group: "com.android.support", module: "support-v4"
+    }
+    compile 'com.google.code.gson:gson:2.6.2'
 }

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.progress_android.DailyPlanActivity;
 import com.progress_android.R;
 
 import java.util.ArrayList;
@@ -19,9 +18,9 @@ import java.util.List;
 
 import Adapter.TimeLineAdapter;
 import DataBase.DailyPlanDataBaseHelper;
-import DataBase.FeedReaderContract;
+import DataBase.DailyPlanDbSchema;
 import Dialog.AddEventDialogFragment;
-import Item.DaliyPlan.ItemInTimeline;
+import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +35,7 @@ public class TimeLineFragment extends Fragment {
     private RecyclerView recyclerView;
     private TimeLineAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<ItemInTimeline> itemList = new ArrayList<>();
+    private List<TimeLineItem> itemList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -88,7 +87,7 @@ public class TimeLineFragment extends Fragment {
         dialog.show(getChildFragmentManager(), "AddEventDialogFragment");
     }
 
-    public void addItem(ItemInTimeline addedItem){
+    public void addItem(TimeLineItem addedItem){
         mAdapter.addItem(0,addedItem);
     }
 
@@ -98,7 +97,7 @@ public class TimeLineFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = db.query(
-                FeedReaderContract.TimeLineData.TABLE_NAME,   // The table to query
+                DailyPlanDbSchema.TimeLineData.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
                 null,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
@@ -108,12 +107,12 @@ public class TimeLineFragment extends Fragment {
         );
 
         while(cursor.moveToNext()) {
-            String content = cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_CONTENT));
-            int type = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_TYPE));
-            int hour = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_HOUR));
-            int mins = cursor.getInt(cursor.getColumnIndexOrThrow(FeedReaderContract.TimeLineData.COLUMN_MINS));
+            String content = cursor.getString(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_CONTENT));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_TYPE));
+            int hour = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_HOUR));
+            int mins = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_MINS));
 
-            ItemInTimeline item = new ItemInTimeline(content, new MyTime(hour, mins), type);
+            TimeLineItem item = new TimeLineItem(content, new MyTime(hour, mins), type);
             itemList.add(item);
         }
     }
@@ -129,29 +128,29 @@ public class TimeLineFragment extends Fragment {
 
     public void saveData(SQLiteDatabase db){
         for(int i=0;i<itemList.size();++i){
-            ItemInTimeline item = itemList.get(i);
+            TimeLineItem item = itemList.get(i);
             ContentValues values = new ContentValues();
-            values.put(FeedReaderContract.TimeLineData.COLUMN_CONTENT,item.getContent());
-            values.put(FeedReaderContract.TimeLineData.COLUMN_TYPE, item.getVariety());
-            values.put(FeedReaderContract.TimeLineData.COLUMN_HOUR,item.getStartTimeHour());
-            values.put(FeedReaderContract.TimeLineData.COLUMN_MINS,item.getStartTimeMins());
+            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_CONTENT,item.getContent());
+            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_TYPE, item.getVariety());
+            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_HOUR,item.getStartTimeHour());
+            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_MINS,item.getStartTimeMins());
 
-            db.insert(FeedReaderContract.TimeLineData.TABLE_NAME, null,values);
+            db.insert(DailyPlanDbSchema.TimeLineData.TABLE_NAME, null,values);
         }
     }
 
     public void initListWithDefaultInfor(){
-        ItemInTimeline moyu = new ItemInTimeline("摸鱼", new MyTime(8,0));
+        TimeLineItem moyu = new TimeLineItem("摸鱼", new MyTime(8,0));
         moyu.setTimePointImageId(R.drawable.completed_point);
-        ItemInTimeline chuanhuo = new ItemInTimeline("传火", new MyTime(13,0));
+        TimeLineItem chuanhuo = new TimeLineItem("传火", new MyTime(13,0));
         chuanhuo.setTimePointImageId(R.drawable.completed_point);
         //ItemInTimeline free1 = ItemInTimeline.getFreeItem(moyu,chuanhuo);
-        ItemInTimeline dushu = new ItemInTimeline("读书", new MyTime(15,0));
+        TimeLineItem dushu = new TimeLineItem("读书", new MyTime(15,0));
         dushu.setTimePointImageId(R.drawable.doing_point);
         //ItemInTimeline free2 = ItemInTimeline.getFreeItem(chuanhuo, dushu);
-        ItemInTimeline duanlian = new ItemInTimeline("锻炼", new MyTime(20,0));
+        TimeLineItem duanlian = new TimeLineItem("锻炼", new MyTime(20,0));
         //ItemInTimeline free3 = ItemInTimeline.getFreeItem(dushu,duanlian);
-        ItemInTimeline xizao = new ItemInTimeline("洗澡", new MyTime(22,0));
+        TimeLineItem xizao = new TimeLineItem("洗澡", new MyTime(22,0));
         //ItemInTimeline free4 = ItemInTimeline.getFreeItem(duanlian, xizao);
 
         itemList.add(moyu);

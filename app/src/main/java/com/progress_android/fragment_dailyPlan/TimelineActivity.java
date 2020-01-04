@@ -1,8 +1,8 @@
-package com.progress_android;
+package com.progress_android.fragment_dailyPlan;
 
 import Adapter.TimeLineAdapter;
 import Dialog.StartTimeSettingDialog;
-import Item.DaliyPlan.ItemInTimeline;
+import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+
+import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class TimelineActivity extends AppCompatActivity implements StartTimeSett
     private RecyclerView recyclerView;
     private TimeLineAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<ItemInTimeline> itemList = new ArrayList<>();
+    private List<TimeLineItem> itemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +45,17 @@ public class TimelineActivity extends AppCompatActivity implements StartTimeSett
     }
 
     private void initItemList() {
-        ItemInTimeline moyu = new ItemInTimeline("摸鱼", new MyTime(8,0));
+        TimeLineItem moyu = new TimeLineItem("摸鱼", new MyTime(8,0));
         moyu.setTimePointImageId(R.drawable.completed_point);
-        ItemInTimeline chuanhuo = new ItemInTimeline("传火", new MyTime(13,0));
+        TimeLineItem chuanhuo = new TimeLineItem("传火", new MyTime(13,0));
         chuanhuo.setTimePointImageId(R.drawable.completed_point);
         //ItemInTimeline free1 = ItemInTimeline.getFreeItem(moyu,chuanhuo);
-        ItemInTimeline dushu = new ItemInTimeline("读书", new MyTime(15,0));
+        TimeLineItem dushu = new TimeLineItem("读书", new MyTime(15,0));
         dushu.setTimePointImageId(R.drawable.doing_point);
         //ItemInTimeline free2 = ItemInTimeline.getFreeItem(chuanhuo, dushu);
-        ItemInTimeline duanlian = new ItemInTimeline("锻炼", new MyTime(20,0));
+        TimeLineItem duanlian = new TimeLineItem("锻炼", new MyTime(20,0));
         //ItemInTimeline free3 = ItemInTimeline.getFreeItem(dushu,duanlian);
-        ItemInTimeline xizao = new ItemInTimeline("洗澡", new MyTime(22,0));
+        TimeLineItem xizao = new TimeLineItem("洗澡", new MyTime(22,0));
         //ItemInTimeline free4 = ItemInTimeline.getFreeItem(duanlian, xizao);
 
         itemList.add(moyu);

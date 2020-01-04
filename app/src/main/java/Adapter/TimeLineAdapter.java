@@ -18,13 +18,13 @@ import Dialog.TypeChooseDialog;
 import Item.Item;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.progress_android.DailyPlanActivity;
+import com.progress_android.fragment_dailyPlan.DailyPlanActivity;
 import com.progress_android.R;
 import Dialog.StartTimeSettingDialog;
 
 import java.util.List;
 
-import Item.DaliyPlan.ItemInTimeline;
+import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +36,7 @@ import static android.view.View.INVISIBLE;
  */
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHolder>{
-    private List<ItemInTimeline> mItemInTimelineList;
+    private List<TimeLineItem> mItemInTimelineList;
     private static String TAG = "TimeLineAdapter";
     private Context context;
 
@@ -63,7 +63,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         }
     }
 
-    public TimeLineAdapter(List<ItemInTimeline> itemInTimelineList, Context context){
+    public TimeLineAdapter(List<TimeLineItem> itemInTimelineList, Context context){
         this.context = context;
         mItemInTimelineList = itemInTimelineList;
     }
@@ -117,7 +117,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
             @Override
             public void afterTextChanged(Editable s) {
                 int position = holder.getAdapterPosition();
-                ItemInTimeline eventItem = mItemInTimelineList.get(position);
+                TimeLineItem eventItem = mItemInTimelineList.get(position);
                 eventItem.setContent(s.toString());
             }
         });
@@ -126,7 +126,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         return holder;
     }
 
-    public void addItem(int position, ItemInTimeline item){
+    public void addItem(int position, TimeLineItem item){
         mItemInTimelineList.add(position,item);
         notifyItemInserted(position);
         notifyDataSetChanged();
@@ -139,7 +139,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         }else if(position == getItemCount()-1){
             holder.backLine.setVisibility(INVISIBLE);
         }
-        ItemInTimeline itemInTimeline = mItemInTimelineList.get(position);
+        TimeLineItem itemInTimeline = mItemInTimelineList.get(position);
         int imageId = itemInTimeline.getTimePointImageId();
         holder.matterContent.setText(itemInTimeline.getContent());
         holder.startTime.setText(itemInTimeline.getStarttimeText());
@@ -201,7 +201,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
                 return;
             }
         }
-        ItemInTimeline item = mItemInTimelineList.get(position);
+        TimeLineItem item = mItemInTimelineList.get(position);
         mItemInTimelineList.remove(position);
 
         notifyItemRemoved(position);

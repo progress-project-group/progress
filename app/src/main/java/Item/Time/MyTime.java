@@ -1,5 +1,7 @@
 package Item.Time;
 
+import java.util.Date;
+
 /**
  * Created by Yamaa on 2019/3/20.
  */
@@ -57,5 +59,10 @@ public class MyTime {
 
     public boolean equals(MyTime time){
         return this.hours==time.hours&&this.mins==time.mins;
+    }
+
+    public MyTime(Date date){
+        this.hours = date.getHours();
+        this.mins = date.getMinutes();
     }
 }

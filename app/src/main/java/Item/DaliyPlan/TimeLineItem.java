@@ -10,7 +10,7 @@ import Item.Time.MyTime;
  * Created by Yamaa on 2019/3/20.
  */
 
-public class ItemInTimeline extends Item {
+public class TimeLineItem extends Item {
     private MyTime startTime;
     private int timePointImageId;
 
@@ -53,19 +53,19 @@ public class ItemInTimeline extends Item {
 
     public MyTime getStartTime(){return  startTime;}
 
-    public boolean later(ItemInTimeline item){
+    public boolean later(TimeLineItem item){
         return this.startTime.later(item.startTime);
     }
 
-    public boolean equals(ItemInTimeline item) {return this.startTime.equals(item.startTime);}
+    public boolean equals(TimeLineItem item) {return this.startTime.equals(item.startTime);}
 
-    public ItemInTimeline(String content, MyTime startTime){
+    public TimeLineItem(String content, MyTime startTime){
         super(content);
         this.startTime = startTime;
         timePointImageId = R.drawable.blue_time_point;
     }
 
-    public ItemInTimeline(String content, MyTime startTime, int type){
+    public TimeLineItem(String content, MyTime startTime, int type){
         super(content,type);
         this.startTime = startTime;
         timePointImageId = R.drawable.blue_time_point;

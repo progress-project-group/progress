@@ -57,7 +57,7 @@ public class TypeChooseDialog extends DialogFragment {
         typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.relax_button));
         typeChooseButton.add((RadioButton) DialogView.findViewById(R.id.other_button));
 
-        if(checkedItem < Item.typeNum) {
+        if(checkedItem < Item.typeNum&&checkedItem>=0) {
             typeChooseButton.get(checkedItem).setChecked(true);
         }
 

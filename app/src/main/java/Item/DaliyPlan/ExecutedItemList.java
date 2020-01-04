@@ -26,11 +26,12 @@ public class ExecutedItemList {
 
     }
 
-    //添加新项调用
+    //添加被取消或者已经完成的项
     public void addExecutedItem(ExecutedItem executedItem){
-        executedItemList.add(executedItem);
+        if(!executedItemList.contains(executedItem)) {
+            executedItemList.add(executedItem);
+        }
         addOrderPoint(executedItem);
-        currentItem = executedItem;
     }
 
     public ExecutedItem getNext(ExecutedItem executedItem){

@@ -1,12 +1,12 @@
-package com.progress_android;
+package com.progress_android.fragment_dailyPlan;
 
 import DataBase.DailyPlanDataBaseHelper;
-import DataBase.FeedReaderContract;
+import DataBase.DailyPlanDbSchema;
 import Dialog.AddEventDialogFragment;
 import Dialog.StartTimeSettingDialog;
 import Dialog.TypeChooseDialog;
 import Item.DaliyPlan.EventItem;
-import Item.DaliyPlan.ItemInTimeline;
+import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +31,7 @@ import android.view.MenuItem;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.progress_android.fragment_dailyPlan.EventListFragment;
-import com.progress_android.fragment_dailyPlan.TimeLineFragment;
+import com.progress_android.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_plan);
         Intent intent = getIntent();
-        planID = intent.getIntExtra("PLANID", 1);
+        planID = intent.getIntExtra("PLANID", TODAY);
         initList();
         PagerTitleStrip titleStrip = (PagerTitleStrip) findViewById(R.id.pager_header);
         titleStrip.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -129,10 +128,10 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String sCurrentDate = sdf.format(dCurrentDate);
         values.put("Date", sCurrentDate);
-        db.insert(FeedReaderContract.Time.TABLE_NAME, null,values);
+        db.insert(DailyPlanDbSchema.Time.TABLE_NAME, null,values);
 
-        db.execSQL("delete from "+ FeedReaderContract.TimeLineData.TABLE_NAME);
-        db.execSQL("delete from "+ FeedReaderContract.EventListData.TABLE_NAME);
+        db.execSQL("delete from "+ DailyPlanDbSchema.TimeLineData.TABLE_NAME);
+        db.execSQL("delete from "+ DailyPlanDbSchema.EventListData.TABLE_NAME);
 
         timeLineFragment.saveData(db);
         eventListFragment.saveData(db);
@@ -156,7 +155,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
             EventItem addedItem = new EventItem(dialog.eventContent.getText().toString());
             eventListFragment.addEventItem(addedItem);
         } else{
-            ItemInTimeline addedItem = new ItemInTimeline(dialog.eventContent.getText().toString(),new MyTime(0,0));
+            TimeLineItem addedItem = new TimeLineItem(dialog.eventContent.getText().toString(),new MyTime(0,0));
             timeLineFragment.addItem(addedItem);
         }
     }
@@ -227,7 +226,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
         fragmentList.add(timeLineFragment);
 
         Cursor cursor = db.query(
-                FeedReaderContract.Time.TABLE_NAME,   // The table to query
+                DailyPlanDbSchema.Time.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
                 null,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
@@ -240,7 +239,7 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
             Log.d("TAG", "judge date");
             //判断数据库中的数据是否是本日的数据
             String date;
-            date = cursor.getString(cursor.getColumnIndex(FeedReaderContract.Time.COLUMN_TIME));
+            date = cursor.getString(cursor.getColumnIndex(DailyPlanDbSchema.Time.COLUMN_TIME));
             Date dCurrentDate = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String sCurrentDate = sdf.format(dCurrentDate);

@@ -1,4 +1,4 @@
-package com.progress_android;
+package com.progress_android.fragment_dailyPlan;
 
 import Adapter.EventListAdapter;
 import Dialog.AddEventDialogFragment;
@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
+import com.progress_android.R;
 
 import java.util.ArrayList;
 import java.util.List;

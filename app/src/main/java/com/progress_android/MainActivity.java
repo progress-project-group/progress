@@ -9,10 +9,15 @@ import android.widget.Button;
 
 import com.progress_android.LongTermSchedule.LongTermScheduleListActivity;
 import com.progress_android.MonthlyPlan.MonthlyPlanActivity;
+import com.progress_android.activity_implement.ImplementActivity;
+import com.progress_android.fragment_dailyPlan.DailyPlanActivity;
+import com.progress_android.fragment_dailyPlan.EventListActivity;
+import com.progress_android.fragment_dailyPlan.TimelineActivity;
+import com.progress_android.fragment_summary.DailySummaryActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.progress_android.DailyPlanActivity.TODAY;
+import static com.progress_android.fragment_dailyPlan.DailyPlanActivity.TODAY;
 
 public class MainActivity extends AppCompatActivity {
     String TAG = "main_activity";
@@ -28,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         TimeLineTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,TimelineActivity.class);
+                Intent intent = new Intent(MainActivity.this, TimelineActivity.class);
                 Log.d(TAG,"startTimeLineActivity");
                 startActivity(intent);
             }
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         EventListTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,EventListActivity.class);
+                Intent intent = new Intent(MainActivity.this, EventListActivity.class);
                 Log.d(TAG,"startEventListActivity");
                 startActivity(intent);
             }
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,DailyPlanActivity.class);
+                Intent intent = new Intent(MainActivity.this, DailyPlanActivity.class);
                 Log.d(TAG,"startFragmentTestActivity");
                 intent.putExtra("PLANID", TODAY);
                 startActivity(intent);
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         SummaryTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,DailySummaryActivity.class);
+                Intent intent = new Intent(MainActivity.this, DailySummaryActivity.class);
                 Log.d(TAG,"startSummaryTestActivity");
                 startActivity(intent);
             }
@@ -80,6 +85,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MonthlyPlanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //执行计划
+        Button ExecuteTestButton = (Button) findViewById(R.id.ExecuteTestButton);
+        ExecuteTestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ImplementActivity.class);
                 startActivity(intent);
             }
         });
