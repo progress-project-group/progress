@@ -12,7 +12,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activity_implement.ImplementActivity"></activity>
-        <activity android:name=".ImplementPlan.ImplementActivity" />
         <activity
             android:name=".MonthlyPlan.EventAddActivity"
             android:theme="@style/MonthlyTheme" />

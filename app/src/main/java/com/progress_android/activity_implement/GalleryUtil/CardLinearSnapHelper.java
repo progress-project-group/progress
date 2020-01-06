@@ -1,4 +1,4 @@
-package com.progress_android.activity_implement.util;
+package com.progress_android.activity_implement.GalleryUtil;
 
 import android.view.View;
 

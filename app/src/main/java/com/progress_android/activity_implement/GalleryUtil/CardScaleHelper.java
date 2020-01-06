@@ -1,4 +1,4 @@
-package com.progress_android.activity_implement.util;
+package com.progress_android.activity_implement.GalleryUtil;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,15 +16,16 @@ public class CardScaleHelper {
     private Context mContext;
 
     private float mScale = 0.9f; // 两边视图scale
-    private int mPagePadding = 15; // 卡片的padding, 卡片间的距离等于2倍的mPagePadding
-    private int mShowLeftCardWidth = 15;   // 左边卡片显示大小
+    private int mPagePadding = 0; // 卡片的padding, 卡片间的距离等于2倍的mPagePadding
+    private int mShowLeftCardWidth = 0;   // 左边卡片显示大小
 
-    private int mCardWidth; // 卡片宽度
+    private int mCardWidth = 250+10; // 卡片宽度+margin
     private int mOnePageWidth; // 滑动一页的距离
-    private int mCardGalleryWidth;
+    private int mCardGalleryWidth;//屏幕宽度
 
-    private int mCurrentItemPos;
-    private int mCurrentItemOffset;
+    private int mCurrentItemPos; //初始的offset,需要注意
+    private int mCurrentItemOffset = 199;
+    private String TAG = "CardScaleHelper";
 
     private CardLinearSnapHelper mLinearSnapHelper = new CardLinearSnapHelper();
 
@@ -51,7 +52,7 @@ public class CardScaleHelper {
                 if(dx != 0){//去掉奇怪的内存疯涨问题
                     mCurrentItemOffset += dx;
                     computeCurrentItemPos();
-                    LogUtils.v(String.format("dx=%s, dy=%s, mScrolledX=%s", dx, dy, mCurrentItemOffset));
+                    //LogUtils.v(String.format("dx=%s, dy=%s, mScrolledX=%s", dx, dy, mCurrentItemOffset));
                     onScrolledChangedCallback();
                 }
             }
@@ -69,8 +70,14 @@ public class CardScaleHelper {
             @Override
             public void run() {
                 mCardGalleryWidth = mRecyclerView.getWidth();
-                mCardWidth = mCardGalleryWidth - ScreenUtil.dip2px(mContext, 2 * (mPagePadding + mShowLeftCardWidth));
+                //减少量的值方便判断
+                mCardWidth = ScreenUtil.dip2px(mContext, 260)-1;
+                //Log.d(TAG+"initWidth", "mCardGalleryWidth:"+mCardGalleryWidth);
+
                 mOnePageWidth = mCardWidth;
+                //Log.d(TAG+"initWidth", "mCardGalleryWidth:"+mCardGalleryWidth);
+                //Log.d(TAG+"initWidth", "mCardWidth:"+mCardWidth);
+                //Log.d(TAG+"initWidth", "mOnePageWidth:"+mOnePageWidth);
                 mRecyclerView.smoothScrollToPosition(mCurrentItemPos);
                 onScrolledChangedCallback();
             }
@@ -96,15 +103,14 @@ public class CardScaleHelper {
         if (mOnePageWidth <= 0) return;
         boolean pageChanged = false;
         // 滑动超过一页说明已翻页
-        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth) {
-            pageChanged = true;
-        }
-        if (pageChanged) {
-            int tempPos = mCurrentItemPos;
-
-            mCurrentItemPos = mCurrentItemOffset / mOnePageWidth;
-            LogUtils.d(String.format("=======onCurrentItemPos Changed======= tempPos=%s, mCurrentItemPos=%s", tempPos, mCurrentItemPos));
-        }
+//        if (Math.abs(mCurrentItemOffset - mCurrentItemPos * mOnePageWidth) >= mOnePageWidth) {
+//            pageChanged = true;
+//        }
+        int tempPos = mCurrentItemPos;
+        Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemOffset:"+mCurrentItemOffset);
+        Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemPos:"+mCurrentItemPos);
+        mCurrentItemPos = (mCurrentItemOffset) / mOnePageWidth;
+        LogUtils.d(String.format("=======onCurrentItemPos Changed======= tempPos=%s, mCurrentItemPos=%s", tempPos, mCurrentItemPos));
     }
 
     /**

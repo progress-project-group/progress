@@ -2,34 +2,27 @@ package com.progress_android.activity_implement;
 
 import Adapter.ImplementELAdapter;
 import Adapter.ImplementTLAdapter;
-import DataBase.DailyPlanDataBaseHelper;
 import DataBase.DailyPlanDbOperator;
-import DataBase.DailyPlanDbSchema;
-import Item.DaliyPlan.EventItem;
 import Item.DaliyPlan.ExecutedItem;
 import Item.Item;
 import Item.DaliyPlan.ExecutedItemList;
 import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
-import Item.Time.Pomodoro;
-import Item.Time.TimeAmount;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.progress_android.R;
-import com.progress_android.activity_implement.util.CardScaleHelper;
+import com.progress_android.activity_implement.CenterUtil.CenterLayoutManager;
+import com.progress_android.activity_implement.GalleryUtil.CardScaleHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,9 +39,6 @@ public class ImplementActivity extends AppCompatActivity {
     ExecutedItemList executedItemList;
     ExecutedItem currentItem;
 
-    Button cancelButton;
-    Button pauseButton;
-    Button confirmButton;
     RecyclerView eventListRecyclerView;
     RecyclerView timeLineRecyclerView;
     ImplementELAdapter eventListAdapter;
@@ -58,40 +48,16 @@ public class ImplementActivity extends AppCompatActivity {
 
     int timeLinePosition = 0;
     int eventPosition;
+    boolean nextMatter = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_implement);
-        cancelButton = findViewById(R.id.Implement_Cancel);
-        pauseButton = findViewById(R.id.Implement_Pause);
-        confirmButton = findViewById(R.id.Implement_Finish);
         eventListRecyclerView = findViewById(R.id.IEventListRecycleView);
         timeLineRecyclerView = findViewById(R.id.ITimeLineRecycleView);
 
         initData();
-        //点击取消时更新eventList显示信息，更新时间轴记录信息，更新执行时间轴
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishMatter(CANCEL, true);
-            }
-        });
-
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishMatter(PAUSE, false);
-            }
-        });
-
-        //开始按钮响应函数
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMatter(currentItem);
-            }
-        });
 
         eventListAdapter = new ImplementELAdapter(eventList, this);
         timeLineAdapter = new ImplementTLAdapter(timeLine, this);
@@ -99,12 +65,14 @@ public class ImplementActivity extends AppCompatActivity {
         LinearLayoutManager l2 = new LinearLayoutManager(this);
         eventListRecyclerView.setAdapter(eventListAdapter); eventListRecyclerView.setLayoutManager(l2);
         timeLineRecyclerView.setAdapter(timeLineAdapter); timeLineRecyclerView.setLayoutManager(l1);
-        new CardScaleHelper().attachToRecyclerView(timeLineRecyclerView);
 
         boolean flag = false;
         int currentPosition = -1;
-        for(int i=0; i<timeLine.size(); ++i){
+        for(int i=1; i<timeLine.size()-1; ++i){
+            Gson gson = new Gson();
+            Log.d(TAG, "i="+i);
             ExecutedItem executedItem = timeLine.get(i);
+            Log.d(TAG, gson.toJson(executedItem));
             if(executedItem.getStatus()==DOING){
                 currentPosition = i;
                 break ;
@@ -118,61 +86,98 @@ public class ImplementActivity extends AppCompatActivity {
                 }
             }
         }
+        timeLinePosition = currentPosition;
         if(!flag){
-            currentPosition = timeLine.size()-1;
+            timeLinePosition = timeLine.size()-2;
         }
-        if(currentPosition>=0){
-            currentItem = timeLine.get(currentPosition);
-            timeLineRecyclerView.smoothScrollToPosition(currentPosition);
+        assert timeLinePosition>=0;
+        currentItem = timeLine.get(timeLinePosition);
+        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
+        CardScaleHelper cardScaleHelper = new CardScaleHelper();
+        cardScaleHelper.setCurrentItemPos(timeLinePosition);
+        cardScaleHelper.attachToRecyclerView(timeLineRecyclerView);
+        //l1.smoothScrollToPosition(timeLineRecyclerView, );
+
+        if(currentItem.getStatus()==DOING){
+            nextMatter = false;
         }
+        Log.d(TAG, "当前任务的position："+timeLinePosition);
     }
 
-    //从eventList中加入到timeLine中
-    public boolean startMatter(ExecutedItem item, int eventPosition){
+    // 从eventList中开始任务
+    // 从eventList中加入到timeLine中
+    public boolean startEventListMatter(ExecutedItem item, int eventPosition){
+        if(!nextMatter){
+            Toast.makeText(this, "当前任务还未完成哦", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        //记录统计数据
         Date date = new Date();
         MyTime startTime = new MyTime(date.getHours(), date.getMinutes());
-        if(currentItem.getPlanedStartTime().later(startTime)){
-            if(currentItem.getStatus()==DOING||currentItem.getStatus()==WAITING){
-                Toast.makeText(this, "还有未完成的任务哦", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        }
+        item.addStartTime(startTime);
+
         currentItem = item;
         this.eventPosition = eventPosition;
         TimeLineItem timelineItem = new TimeLineItem(item.getContent(), startTime, item.getVariety());
         item.setTimeLineItem(timelineItem);
         item.setStatus(DOING);
+
         timeLinePosition = timeLineAdapter.startMatter(item);
+        Log.d(TAG, "从EventList开始任务："+eventPosition);
+        Log.d(TAG, "插入TimeLine位置："+timeLinePosition);
         eventListAdapter.notifyItemChanged(eventPosition);
 
-        pauseButton.setVisibility(View.VISIBLE);
-        confirmButton.setText("完成");
-        //
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishMatter(Item.COMPLETED, true);
-            }
-        });
         timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
         return true;
     }
 
-    public void startMatter(ExecutedItem item){
+    //从timeLine直接开始任务
+    public void startTimeLineMatter(ExecutedItem item, int position){
+        if(!nextMatter){
+            Toast.makeText(this, "当前任务还未完成哦", Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        Log.d(TAG, "当前timeLine position为"+this.timeLinePosition);
+        if(position != this.timeLinePosition){
+            Log.d(TAG, "开始position为"+position+" 的任务");
+            new MaterialAlertDialogBuilder(this, R.style.dialogTheme)
+                    .setTitle("提示")
+                    .setMessage("还有任务没有完成，确定要直接开始吗？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            skipMatter(position);
+                        }
+                    })
+                    .show();
+        }
+        timeLinePosition = position;
+        nextMatter = false;
         currentItem = item;
-        pauseButton.setVisibility(View.VISIBLE);
-        confirmButton.setText("完成");
-        //
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishMatter(Item.COMPLETED, true);
-            }
-        });
+        currentItem.setStatus(DOING);
+        currentItem.addStartTime(new MyTime(new Date()));
+        timeLineAdapter.notifyItemChanged(timeLinePosition);
         timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
     }
 
+    private void skipMatter(int position){
+        for(int i=1; i<position; ++i){
+            ExecutedItem item = timeLine.get(i);
+            if(item.getStatus()==WAITING){
+                item.setStatus(CANCEL);
+            }
+        }
+        timeLineAdapter.notifyDataSetChanged();
+        //eventListAdapter.notifyItemChanged();
+    }
+
+    //在timeLine中选择暂停、取消、完成任务
+    //更新eventList中的数据显示
+    //更新统计数据
+    //将timeline推进到下一个任务
     public void finishMatter(int status, boolean boost){
+        //更新eventList数据
+        nextMatter = true;
         currentItem.setStatus(status);
         if(currentItem.isEventItem()){
             if(status==CANCEL) {
@@ -183,22 +188,22 @@ public class ImplementActivity extends AppCompatActivity {
                 eventListAdapter.completeMatter(currentItem, eventPosition);
             }
         }
-        //timeLineList的更新
+        //统计数据更新
+        currentItem.addEndTime(new MyTime(new Date()));
         executedItemList.addExecutedItem(currentItem);
+
+        timeLineAdapter.notifyItemChanged(timeLinePosition);
         //推进到时间轴的下一个事件，等待用户选择开始或取消
-        if(boost){
+        if(timeLinePosition==timeLine.size()-2){
+            return ;
+        }
+        if(boost) {
             ++timeLinePosition;
-            timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
+            currentItem = timeLine.get(timeLinePosition);
         }
         currentItem.setStatus(Item.WAITING);
-        pauseButton.setVisibility(View.GONE);
-        confirmButton.setText("开始");
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMatter(currentItem);
-            }
-        });
+        timeLineAdapter.notifyItemChanged(timeLinePosition);
+        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
     }
 
     public void initData(){
@@ -208,6 +213,8 @@ public class ImplementActivity extends AppCompatActivity {
         Log.d(TAG, "read daily plan data");
         eventList = DailyPlanDbOperator.getExecutedEventListData(this);
         timeLine = DailyPlanDbOperator.getExecutedTimeLine(this);
+        timeLine.add(0, null);
+        timeLine.add(timeLine.size(), null);
         Log.d(TAG, "eventList size: "+ eventList.size());
         Log.d(TAG, "timeLine size: "+ timeLine.size());
         Gson gson = new Gson();
@@ -219,6 +226,8 @@ public class ImplementActivity extends AppCompatActivity {
         DailyPlanDbOperator.clearDailyData(this);
         DailyPlanDbOperator.updateDateData(this);
         DailyPlanDbOperator.saveExecutedEventData(eventList, this);
+        timeLine.remove(0);
+        timeLine.remove(timeLine.size()-1);
         DailyPlanDbOperator.saveExecutedTimeLineData(timeLine, this);
     }
 

@@ -2,23 +2,51 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="250dp"
-    android:layout_height="300dp"
+    android:layout_height="320dp"
     xmlns:custom="http://schemas.android.com/tools"
     android:layout_margin="5dp"
-    app:cardCornerRadius="4dp">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_gravity="center">
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/timeLine_container">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/cancel"
+                android:id="@+id/Implement_Cancel"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/Implement_Start"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/start"
+                />
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/Implement_Confirm"
+                android:background="@drawable/confirm"
+                android:visibility="gone"/>
+        </LinearLayout>
+
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:id="@+id/ImplementMatterImage"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
@@ -44,6 +72,12 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:id="@+id/Implement_Status"/>
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/Implement_StatusImage"
+            android:visibility="gone"
+            android:gravity="center"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
