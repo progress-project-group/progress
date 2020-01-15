@@ -75,9 +75,10 @@
         <Button
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
             android:id="@+id/Implement_StatusImage"
             android:visibility="gone"
-            android:gravity="center"/>
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

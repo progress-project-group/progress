@@ -1,7 +1,6 @@
-package Adapter;
+package Adapter.Implement;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,8 @@ import java.util.List;
 import Item.DaliyPlan.ExecutedItem;
 import Item.Item;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static android.view.View.GONE;
 
 public class ImplementELAdapter extends RecyclerView.Adapter<ImplementELAdapter.ViewHolder>{
     private List<ExecutedItem> eventItemList;
@@ -84,6 +85,10 @@ public class ImplementELAdapter extends RecyclerView.Adapter<ImplementELAdapter.
         holder.eventContent.setText(eventItem.getContent());
         holder.typeImage.setBackgroundResource(Item.iconId[eventItem.getVariety()]);
 
+        for(int i=0; i<eventItem.getCompletedNum()&&i<6; ++i){
+            holder.tomato[i].setBackgroundResource(R.drawable.tomato);
+        }
+
         if(eventItem.getTimeAmount()==null) {
             Log.d(TAG, "error element" + position + " timeAmount is null");
             holder.eventPriority.setText(" " + eventItem.getPriority());
@@ -109,17 +114,24 @@ public class ImplementELAdapter extends RecyclerView.Adapter<ImplementELAdapter.
         });
 
         if(eventItem.getStatus()==Item.DOING){
-            holder.start_button.setVisibility(View.GONE);
-            holder.cancel_button.setVisibility(View.GONE);
+            holder.start_button.setVisibility(GONE);
+            holder.cancel_button.setVisibility(GONE);
+            holder.statusImage.setVisibility(View.VISIBLE);
             holder.statusImage.setBackgroundResource(R.drawable.pause);
         }else if(eventItem.getStatus()==Item.CANCEL){
-            holder.start_button.setVisibility(View.GONE);
-            holder.cancel_button.setVisibility(View.GONE);
+            holder.start_button.setVisibility(GONE);
+            holder.cancel_button.setVisibility(GONE);
+            holder.statusImage.setVisibility(View.VISIBLE);
             holder.statusImage.setBackgroundResource(R.drawable.canceled);
         }else if(eventItem.getStatus()==Item.COMPLETED){
-            holder.start_button.setVisibility(View.GONE);
-            holder.cancel_button.setVisibility(View.GONE);
+            holder.start_button.setVisibility(GONE);
+            holder.cancel_button.setVisibility(GONE);
+            holder.statusImage.setVisibility(View.VISIBLE);
             holder.statusImage.setBackgroundResource(R.drawable.completed);
+        }else{
+            holder.start_button.setVisibility(View.VISIBLE);
+            holder.cancel_button.setVisibility(View.VISIBLE);
+            holder.statusImage.setVisibility(GONE);
         }
     }
 

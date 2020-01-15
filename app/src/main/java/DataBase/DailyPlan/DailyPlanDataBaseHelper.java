@@ -1,4 +1,4 @@
-package DataBase;
+package DataBase.DailyPlan;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,6 +25,7 @@ public class DailyPlanDataBaseHelper extends SQLiteOpenHelper {
             DailyPlanDbSchema.EventListData.COLUMN_PORNUMS + " INTEGER," +
             DailyPlanDbSchema.EventListData.COLUMN_WORK + " INTEGER," +
             DailyPlanDbSchema.EventListData.COLUMN_RELAX + " INTEGER," +
+            DailyPlanDbSchema.EventListData.COLUMN_COMPLETED + " INTEGER," +
             DailyPlanDbSchema.EventListData.COLUMN_STATUS + " INTEGER," +
             DailyPlanDbSchema.TimeLineData.COLUMN_STARTTIME + " TEXT," +
             DailyPlanDbSchema.TimeLineData.COLUMN_ENDTIME + " TEXT," +

@@ -77,7 +77,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
         holder.typeChooseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                showTypeChooseDialog(holder.getAdapterPosition(), mItemInTimelineList.get(holder.getAdapterPosition()).getVariety());
+                TimeLineItem timelineItem = mItemInTimelineList.get(holder.getAdapterPosition());
+                if(timelineItem.getVariety() == Item.NONE) {
+                    timelineItem.setVariety(Item.OTHER);
+                }
+                showTypeChooseDialog(holder.getAdapterPosition(), timelineItem.getVariety());
             }
         });
 
@@ -136,14 +140,22 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(position == 0){
             holder.frontLine.setVisibility(INVISIBLE);
+            holder.backLine.setVisibility(View.VISIBLE);
         }else if(position == getItemCount()-1){
+            holder.frontLine.setVisibility(View.VISIBLE);
             holder.backLine.setVisibility(INVISIBLE);
+        }else{
+            holder.frontLine.setVisibility(View.VISIBLE);
+            holder.backLine.setVisibility(View.VISIBLE);
         }
+        holder.timeLineItemDeleteButton.setClickable(true);
         TimeLineItem itemInTimeline = mItemInTimelineList.get(position);
         int imageId = itemInTimeline.getTimePointImageId();
         holder.matterContent.setText(itemInTimeline.getContent());
         holder.startTime.setText(itemInTimeline.getStarttimeText());
-        holder.timePointImage.setImageResource(imageId);
+
+        holder.timePointImage.setImageResource(TimeLineItem.timePointId[itemInTimeline.getStatus()]);
+
 
         Log.d(TAG, "setType");
         if(itemInTimeline.getVariety()!=Item.NONE) {

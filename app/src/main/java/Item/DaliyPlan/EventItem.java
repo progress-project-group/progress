@@ -8,6 +8,7 @@ public class EventItem extends Item{
 
     private int priority;
     public int id;
+    private int completedNum;
     static int idnum = 0;
 
     public TimeAmount getTimeAmount() {
@@ -27,6 +28,7 @@ public class EventItem extends Item{
 
     public EventItem(String content, TimeAmount timeAmount){
         super(content);
+        completedNum = 0;
         id = idnum;
         ++idnum;
         this.timeAmount = timeAmount;
@@ -34,6 +36,7 @@ public class EventItem extends Item{
 
     public EventItem(String content, TimeAmount timeAmount, int variety){
         super(content, variety);
+        completedNum = 0;
         id = idnum;
         ++idnum;
         this.timeAmount = timeAmount;
@@ -47,5 +50,15 @@ public class EventItem extends Item{
         return priority;
     }
 
+    public void addCompletedNum(){
+        ++completedNum;
+    }
 
+    public int getCompletedNum() {
+        return completedNum;
+    }
+
+    public void setCompletedNum(int completedNum){
+        this.completedNum = completedNum;
+    }
 }

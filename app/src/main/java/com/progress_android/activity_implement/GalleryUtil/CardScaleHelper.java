@@ -107,8 +107,8 @@ public class CardScaleHelper {
 //            pageChanged = true;
 //        }
         int tempPos = mCurrentItemPos;
-        Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemOffset:"+mCurrentItemOffset);
-        Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemPos:"+mCurrentItemPos);
+        //Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemOffset:"+mCurrentItemOffset);
+        //Log.d(TAG+"onScrolledChangedCallback", "mCurrentItemPos:"+mCurrentItemPos);
         mCurrentItemPos = (mCurrentItemOffset) / mOnePageWidth;
         LogUtils.d(String.format("=======onCurrentItemPos Changed======= tempPos=%s, mCurrentItemPos=%s", tempPos, mCurrentItemPos));
     }

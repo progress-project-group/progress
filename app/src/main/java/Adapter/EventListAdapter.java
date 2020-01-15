@@ -48,6 +48,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import Item.Item;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder>
         implements DraggableItemAdapter<EventListAdapter.ViewHolder>,
         SwipeableItemAdapter<EventListAdapter.ViewHolder>{
@@ -161,6 +164,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.type_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                EventItem eventItem = eventList.get(holder.getAdapterPosition());
+
+                if(eventItem.getVariety() == Item.NONE) {
+                    eventItem.setVariety(Item.OTHER);
+                }
                 showTypeChooseDialog(holder.getAdapterPosition(), eventList.get(holder.getAdapterPosition()).getVariety());
             }
         });
@@ -178,6 +186,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.tomato_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
                 showTomatoSettingDialog(holder.getAdapterPosition());
             }
         });
@@ -208,16 +217,34 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventItem eventItem = eventList.get(position);
         Log.d(TAG, "content:"+ eventItem.getContent());
+
+        if(eventItem.getStatus()!=Item.WAITING){
+            holder.type_button.setVisibility(GONE);
+            holder.tomato_button.setVisibility(GONE);
+            holder.delete_button.setVisibility(GONE);
+            holder.status.setVisibility(VISIBLE);
+            holder.status.setText(Item.statusText[eventItem.getStatus()]);
+        }else{
+            holder.type_button.setVisibility(VISIBLE);
+            holder.tomato_button.setVisibility(VISIBLE);
+            holder.delete_button.setVisibility(VISIBLE);
+            holder.status.setVisibility(GONE);
+        }
         holder.eventContent.setText(eventItem.getContent());
+
+        for(int i=0; i<eventItem.getCompletedNum()&&i<6; ++i){
+            holder.tomato[i].setBackgroundResource(R.drawable.tomato);
+        }
 
         if(eventItem.getTimeAmount()==null) {
             holder.eventPriority.setText(" " + position);
         }else{
             holder.eventPriority.setText(" " + position + "  " + eventItem.getTimeAmount().getRealtime());
             for(int i=0;i<eventItem.getTimeAmount().getPomodoroNums();++i){
-                holder.tomato[i].setVisibility(View.VISIBLE);
+                holder.tomato[i].setVisibility(VISIBLE);
             }
         }
+
 
         Log.d(TAG, "setType");
         if(eventItem.getVariety()!=Item.NONE) {
@@ -234,6 +261,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         public Button delete_button;
         public Button tomato_button;
         public ImageView[] tomato = new ImageView[6];
+        public TextView status;
 
         public FrameLayout containerView;
 
@@ -251,6 +279,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tomato[3] = (ImageView) view.findViewById(R.id.tomato4);
             tomato[4] = (ImageView) view.findViewById(R.id.tomato5);
             tomato[5] = (ImageView) view.findViewById(R.id.tomato6);
+            status = view.findViewById(R.id.event_status_text);
 
             containerView = (FrameLayout) view.findViewById(R.id.container);
         }

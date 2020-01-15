@@ -17,8 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapter.TimeLineAdapter;
-import DataBase.DailyPlanDataBaseHelper;
-import DataBase.DailyPlanDbSchema;
+import DataBase.DailyPlan.DailyPlanDataBaseHelper;
+import DataBase.DailyPlan.DailyPlanDbOperator;
+import DataBase.DailyPlan.DailyPlanDbSchema;
 import Dialog.AddEventDialogFragment;
 import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
@@ -93,28 +94,7 @@ public class TimeLineFragment extends Fragment {
 
     public void initItemList(Context context) {
         Log.d(TAG,"initEventList");
-        DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        Cursor cursor = db.query(
-                DailyPlanDbSchema.TimeLineData.TABLE_NAME,   // The table to query
-                null,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null               // The sort order
-        );
-
-        while(cursor.moveToNext()) {
-            String content = cursor.getString(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_CONTENT));
-            int type = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_TYPE));
-            int hour = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_HOUR));
-            int mins = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_MINS));
-
-            TimeLineItem item = new TimeLineItem(content, new MyTime(hour, mins), type);
-            itemList.add(item);
-        }
+        itemList = DailyPlanDbOperator.getTimeLineListData(context);
     }
 
     public boolean checkData(){
@@ -126,17 +106,8 @@ public class TimeLineFragment extends Fragment {
         return true;
     }
 
-    public void saveData(SQLiteDatabase db){
-        for(int i=0;i<itemList.size();++i){
-            TimeLineItem item = itemList.get(i);
-            ContentValues values = new ContentValues();
-            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_CONTENT,item.getContent());
-            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_TYPE, item.getVariety());
-            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_HOUR,item.getStartTimeHour());
-            values.put(DailyPlanDbSchema.TimeLineData.COLUMN_MINS,item.getStartTimeMins());
-
-            db.insert(DailyPlanDbSchema.TimeLineData.TABLE_NAME, null,values);
-        }
+    public void saveData(Context context){
+        DailyPlanDbOperator.saveTimeLineData(itemList, context);
     }
 
     public void initListWithDefaultInfor(){

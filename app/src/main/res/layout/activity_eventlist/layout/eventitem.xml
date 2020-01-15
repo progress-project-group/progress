@@ -40,7 +40,7 @@
                     android:id="@+id/tomato1"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -49,7 +49,7 @@
                     android:id="@+id/tomato2"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -58,7 +58,7 @@
                     android:id="@+id/tomato3"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -67,7 +67,7 @@
                     android:id="@+id/tomato4"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -76,7 +76,7 @@
                     android:id="@+id/tomato5"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -85,7 +85,7 @@
                     android:id="@+id/tomato6"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/tomato"
+                    android:src="@drawable/untomato"
                     android:visibility="invisible"/>
             </LinearLayout>
 
@@ -128,6 +128,13 @@
                 android:id="@+id/event_delete_button"
                 android:layout_gravity="center"
                 />
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:id="@+id/event_status_text"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

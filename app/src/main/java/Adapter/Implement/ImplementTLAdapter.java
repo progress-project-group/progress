@@ -1,4 +1,4 @@
-package Adapter;
+package Adapter.Implement;
 
 import android.content.Context;
 import android.util.Log;
@@ -71,13 +71,17 @@ public class ImplementTLAdapter extends RecyclerView.Adapter<ImplementTLAdapter.
 
     @Override
     public void onBindViewHolder(ImplementTLAdapter.ViewHolder holder, int position) {
-        if(position==0||position== timeLine.size()-1){
+        if(position==0||position == timeLine.size()-1){
+            Log.d(TAG, "position="+position+" set invisible");
             holder.itemView.setVisibility(View.INVISIBLE);
             return ;
+        }else{
+            holder.itemView.setVisibility(View.VISIBLE);
         }
-        Log.d(TAG, "for position: "+position);
+
         mCardAdapterHelper.onBindViewHolder(holder.itemView, position, getItemCount());
         ExecutedItem item = timeLine.get(position);
+        Log.d(TAG, "for position: "+position + "status = "+Item.statusText[item.getStatus()]);
         holder.matterContent.setText(item.getContent());
         holder.matterImage.setBackgroundResource(Item.iconId[item.getVariety()]);
         //当任务已经被取消或完成时，只显示类别、内容、与状态图标
@@ -147,19 +151,9 @@ public class ImplementTLAdapter extends RecyclerView.Adapter<ImplementTLAdapter.
         return timeLine.size();
     }
 
-    public int startMatter(ExecutedItem item){
-        int i = 0;
-        ExecutedItem tempItem = timeLine.get(i);
-        while(item.getPlanedStartTime().later(tempItem.getPlanedStartTime())){
-            if(tempItem.getStatus()==Item.WAITING){
-
-                tempItem.setStatus(Item.CANCEL);
-            }
-            ++i;
-        }
-        timeLine.add(i,item);
+    public void startMatter(ExecutedItem item, int position){
+        timeLine.add(position,item);
         //notifyItemMoved(position,i);
-        notifyDataSetChanged();
-        return i;
+        notifyItemInserted(position);
     }
 }

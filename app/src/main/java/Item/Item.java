@@ -23,10 +23,15 @@ public abstract class Item {
     public static final String none = "无";
 
     public static final String[] statusText = new String[]{"等待", "进行中", "已完成", "暂停", "已取消"};
+    //已完成
     public static final int COMPLETED = 2;
+    //正在做
     public static final int DOING = 1;
+    //等待，还未开始
     public static final int WAITING = 0;
+    //被暂停
     public static final int PAUSE = 3;
+    //被取消
     public static final int CANCEL = 4;
 
     private int status = WAITING;

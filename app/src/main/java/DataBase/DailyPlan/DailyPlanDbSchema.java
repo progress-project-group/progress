@@ -1,4 +1,4 @@
-package DataBase;
+package DataBase.DailyPlan;
 
 import android.provider.BaseColumns;
 
@@ -33,6 +33,7 @@ public class DailyPlanDbSchema {
         public static final String COLUMN_PORNUMS = "PorNums";
         public static final String COLUMN_WORK = "Work";
         public static final String COLUMN_RELAX = "Relax";
+        public static final String COLUMN_COMPLETED = "CompletedNum";
         //计划内容
         public static final String COLUMN_CONTENT = "Content";
         //时间类别

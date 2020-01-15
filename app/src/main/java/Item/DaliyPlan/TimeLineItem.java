@@ -14,6 +14,8 @@ public class TimeLineItem extends Item {
     private MyTime startTime;
     private int timePointImageId;
 
+    public static int[] timePointId = {R.drawable.blue_time_point, R.drawable.yellow_time_point, R.drawable.green_time_point, R.drawable.red_time_point};
+
 
     public int getTimePointImageId() {
 

@@ -1,5 +1,7 @@
 package Item.DaliyPlan;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,18 +114,24 @@ public class ExecutedItem extends Item{
         return timeLineItem.getStartTime();
     }
 
+    public int getCompletedNum(){ return eventItem.getCompletedNum();}
+
+    public void setCompletedNum(int completedNum){eventItem.setCompletedNum(completedNum);}
 
     public void setTimeLineItem(TimeLineItem timeLineItem) {
         this.timeLineItem = timeLineItem;
     }
 
     public void setTimeData(List<MyTime> startTime, List<MyTime> endTime){
+        Log.d("EventItem", "startTime.size:"+startTime.size()+" endTime,size："+endTime.size());
+        this.startTime = startTime;
+        this.endTime = endTime;
         if(startTime==null){
             return ;
         }
-        assert startTime.size()==endTime.size();
-        this.startTime = startTime;
-        this.endTime = endTime;
+        if(startTime.size()==0||startTime.size()!=endTime.size()){
+            return ;
+        }
         for(int i=0; i<startTime.size(); ++i){
             timeAmount.add(MyTime.getGap(endTime.get(i), startTime.get(i)));
         }
@@ -139,6 +147,10 @@ public class ExecutedItem extends Item{
 
     public void setNext(List<ExecutedItem> next){
         this.next = next;
+    }
+
+    public void setPriority(int priority){
+        eventItem.setPriority(priority);
     }
 
     private List<Integer> nextID = new ArrayList<>();

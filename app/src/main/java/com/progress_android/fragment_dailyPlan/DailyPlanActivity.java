@@ -1,7 +1,7 @@
 package com.progress_android.fragment_dailyPlan;
 
-import DataBase.DailyPlanDataBaseHelper;
-import DataBase.DailyPlanDbSchema;
+import DataBase.DailyPlan.DailyPlanDataBaseHelper;
+import DataBase.DailyPlan.DailyPlanDbSchema;
 import Dialog.AddEventDialogFragment;
 import Dialog.StartTimeSettingDialog;
 import Dialog.TypeChooseDialog;
@@ -133,8 +133,8 @@ public class DailyPlanActivity extends AppCompatActivity implements AddEventDial
         db.execSQL("delete from "+ DailyPlanDbSchema.TimeLineData.TABLE_NAME);
         db.execSQL("delete from "+ DailyPlanDbSchema.EventListData.TABLE_NAME);
 
-        timeLineFragment.saveData(db);
-        eventListFragment.saveData(db);
+        timeLineFragment.saveData(this);
+        eventListFragment.saveData(this);
         dataSaved = true;
     }
 

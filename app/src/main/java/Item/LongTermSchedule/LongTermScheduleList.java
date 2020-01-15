@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import DataBase.LongTermDataBaseHelper;
-import DataBase.LongTermScheduleSchema.LongTermTable;
+import DataBase.LongTermSchedule.LongTermDataBaseHelper;
+import DataBase.LongTermSchedule.LongTermScheduleSchema.LongTermTable;
 
 public class LongTermScheduleList {
     private static LongTermScheduleList sLongTermScheduleList;

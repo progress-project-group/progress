@@ -1,4 +1,4 @@
-package DataBase;
+package DataBase.DailyPlan;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.progress_android.activity_implement.ImplementActivity;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,7 @@ import Item.Time.Pomodoro;
 import Item.Time.TimeAmount;
 
 public class DailyPlanDbOperator {
-    public static List<EventItem> getDailyEventListData(Context context, Date date){
+    public static List<EventItem> getDailyEventListData(Context context){
         List<EventItem> eventItemList = new ArrayList<>();
         DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -42,12 +43,16 @@ public class DailyPlanDbOperator {
 
         while(cursor.moveToNext()) {
             String content = cursor.getString(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_CONTENT));
+            int priority = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_PRIORITY));
             int type = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_TYPE));
             int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS));
             int work = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_WORK));
             int relax = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_RELAX));
+            int completeNum = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_COMPLETED));
 
             EventItem item = new EventItem( content,new TimeAmount(new Pomodoro(work, relax), porNums), type);
+            item.setPriority(priority);
+            item.setCompletedNum(completeNum);
             eventItemList.add(item);
         }
 
@@ -74,6 +79,8 @@ public class DailyPlanDbOperator {
             int porNums = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS));
             int work = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_WORK));
             int relax = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_RELAX));
+            int completeNum = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_COMPLETED));
+            int priority = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_PRIORITY));
 
             EventItem item = new EventItem( content,new TimeAmount(new Pomodoro(work, relax), porNums), type);
             int status = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_STATUS));
@@ -82,6 +89,8 @@ public class DailyPlanDbOperator {
             String nextItemData = cursor.getString(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.EventListData.COLUMN_NEXT));
 
             ExecutedItem executedItem = new ExecutedItem(item);
+            executedItem.setPriority(priority);
+            executedItem.setCompletedNum(completeNum);
             executedItem.setStatus(status);
             Gson gson = new Gson();
             Type dataListType = new TypeToken<ArrayList<MyTime>>(){}.getType();
@@ -145,9 +154,14 @@ public class DailyPlanDbOperator {
             executedItem.setStatus(status);
             Gson gson = new Gson();
             Type dataListType = new TypeToken<ArrayList<MyTime>>(){}.getType();
+            if(startTimeData!=null) {
+                Log.d("getTimeLineData", startTimeData);
+            }else{
+                Log.d("getTimeLineData", "start time is null!");
+            }
             List<MyTime> startTime = gson.fromJson(startTimeData, dataListType);
             List<MyTime> endTime = gson.fromJson(endTimeData, dataListType);
-
+            Log.d("getTimeLineData startTime:", "" + startTime);
             Type itemListType = new TypeToken<ArrayList<Integer>>(){}.getType();
             List<Integer> nextID = gson.fromJson(nextItemData, itemListType);
 
@@ -190,8 +204,10 @@ public class DailyPlanDbOperator {
             int type = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_TYPE));
             int hour = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_HOUR));
             int mins = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_MINS));
+            int status = cursor.getInt(cursor.getColumnIndexOrThrow(DailyPlanDbSchema.TimeLineData.COLUMN_STATUS));
 
             TimeLineItem item = new TimeLineItem(content, new MyTime(hour, mins), type);
+            item.setStatus(status);
             itemList.add(item);
         }
         return itemList;
@@ -238,12 +254,13 @@ public class DailyPlanDbOperator {
         for(int i=0;i<eventItemList.size();++i){
             EventItem item = eventItemList.get(i);
             ContentValues values = new ContentValues();
-            values.put(DailyPlanDbSchema.EventListData.COLUMN_PRIORITY, item.getPriority());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_PRIORITY, i);
             values.put(DailyPlanDbSchema.EventListData.COLUMN_CONTENT,item.getContent());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_TYPE, item.getVariety());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS,item.getTimeAmount().getPomodoroNums());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_WORK,item.getTimeAmount().getPomodoro().getWork());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_RELAX,item.getTimeAmount().getPomodoro().getRelax());
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_COMPLETED,item.getCompletedNum());
             Log.d("save eventList", "saveData" + values);
             db.insert(DailyPlanDbSchema.EventListData.TABLE_NAME, null,values);
         }
@@ -276,17 +293,18 @@ public class DailyPlanDbOperator {
             values.put(DailyPlanDbSchema.EventListData.COLUMN_PORNUMS,item.getPlanedTimeAmount().getPomodoroNums());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_WORK,item.getPlanedTimeAmount().getPomodoro().getWork());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_RELAX,item.getPlanedTimeAmount().getPomodoro().getRelax());
-
+            values.put(DailyPlanDbSchema.EventListData.COLUMN_COMPLETED,item.getCompletedNum());
             Gson gson = new Gson();
             String startTimeData = gson.toJson(item.getStartTimeData());
             String endTimeData = gson.toJson(item.getEndTimeData());
             String nextID = gson.toJson(item.generateNextID());
+            //Log.d("saveEventListData", "startTime:"+startTimeData);
             values.put(DailyPlanDbSchema.EventListData.COLUMN_STATUS,item.getStatus());
             values.put(DailyPlanDbSchema.EventListData.COLUMN_STARTTIME,startTimeData);
             values.put(DailyPlanDbSchema.EventListData.COLUMN_ENDTIME,endTimeData);
             values.put(DailyPlanDbSchema.EventListData.COLUMN_NEXT,nextID);
 
-            Log.d("save eventList", "saveData" + values);
+            Log.d(ImplementActivity.TAG, "save eventList: " + values);
             db.insert(DailyPlanDbSchema.EventListData.TABLE_NAME, null,values);
         }
     }
@@ -304,18 +322,20 @@ public class DailyPlanDbOperator {
 
             Gson gson = new Gson();
             String startTimeData = gson.toJson(item.getStartTimeData());
+            //Log.d("saveTimeLineData", "startTime:"+startTimeData);
             String endTimeData = gson.toJson(item.getEndTimeData());
             String nextID = gson.toJson(item.generateNextID());
             values.put(DailyPlanDbSchema.TimeLineData.COLUMN_STATUS,item.getStatus());
             values.put(DailyPlanDbSchema.TimeLineData.COLUMN_STARTTIME,startTimeData);
             values.put(DailyPlanDbSchema.TimeLineData.COLUMN_ENDTIME,endTimeData);
             values.put(DailyPlanDbSchema.TimeLineData.COLUMN_NEXT,nextID);
-
+            Log.d(ImplementActivity.TAG, "save timeLine: " + values);
             db.insert(DailyPlanDbSchema.TimeLineData.TABLE_NAME, null,values);
         }
     }
 
     public static void clearDailyData(Context context){
+        Log.d(ImplementActivity.TAG, "clearDailyData");
         DailyPlanDataBaseHelper dbHelper = new DailyPlanDataBaseHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.execSQL("delete from "+ DailyPlanDbSchema.Time.TABLE_NAME);

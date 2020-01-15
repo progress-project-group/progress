@@ -1,4 +1,4 @@
-package DataBase;
+package DataBase.LongTermSchedule;
 
 public class LongTermScheduleSchema {
     public static final class LongTermTable{

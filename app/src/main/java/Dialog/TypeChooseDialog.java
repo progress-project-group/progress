@@ -59,8 +59,8 @@ public class TypeChooseDialog extends DialogFragment {
 
         if(checkedItem < Item.typeNum&&checkedItem>=0) {
             typeChooseButton.get(checkedItem).setChecked(true);
-        }
 
+        }
         typeGroup = DialogView.findViewById(R.id.type_group);
         typeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

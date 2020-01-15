@@ -18,15 +18,15 @@ public class CardAdapterHelper {
 
     public void onCreateViewHolder(ViewGroup parent,  View itemView) {
         RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-        Log.d(TAG, "lp.width="+lp.width + " lp.height="+lp.height);
+        //Log.d(TAG, "lp.width="+lp.width + " lp.height="+lp.height);
         //lp.width = parent.getWidth() - ScreenUtil.dip2px(itemView.getContext(), 2 * (mPagePadding + mShowLeftCardWidth));
-        Log.d(TAG, "update lp.width="+lp.width + " lp.height="+lp.height);
+        //Log.d(TAG, "update lp.width="+lp.width + " lp.height="+lp.height);
         //itemView.setLayoutParams(lp);
     }
 
     public void onBindViewHolder(View itemView, final int position, int itemCount) {
         //int padding = ScreenUtil.dip2px(itemView.getContext(), mPagePadding);
-        Log.d(TAG, "itemView.paddingLeft="+itemView.getPaddingLeft()+" paddingRight="+itemView.getPaddingRight());
+        //Log.d(TAG, "itemView.paddingLeft="+itemView.getPaddingLeft()+" paddingRight="+itemView.getPaddingRight());
         //itemView.setPadding(padding, 0, padding, 0);
         //Log.d(TAG, "update itemView.paddingLeft="+itemView.getPaddingLeft()+" paddingRight="+itemView.getPaddingRight());
         //int leftMarin = position == 0 ? padding + ScreenUtil.dip2px(itemView.getContext(), mShowLeftCardWidth) : 0;
@@ -36,11 +36,11 @@ public class CardAdapterHelper {
 
     private void setViewMargin(View view, int left, int top, int right, int bottom) {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        Log.d(TAG, "itemView.MarginLeft="+lp.leftMargin+" MarginRight="+lp.rightMargin+" MarginBottom="+lp.bottomMargin + " MarginTop="+lp.topMargin);
+        //Log.d(TAG, "itemView.MarginLeft="+lp.leftMargin+" MarginRight="+lp.rightMargin+" MarginBottom="+lp.bottomMargin + " MarginTop="+lp.topMargin);
         if (lp.leftMargin != left || lp.topMargin != top || lp.rightMargin != right || lp.bottomMargin != bottom) {
             lp.setMargins(left, top, right, bottom);
             view.setLayoutParams(lp);
-            Log.d(TAG, "update itemView.MarginLeft="+lp.leftMargin+" MarginRight="+lp.rightMargin+" MarginBottom="+lp.bottomMargin + " MarginTop="+lp.topMargin);
+            //Log.d(TAG, "update itemView.MarginLeft="+lp.leftMargin+" MarginRight="+lp.rightMargin+" MarginBottom="+lp.bottomMargin + " MarginTop="+lp.topMargin);
         }
     }
 

@@ -1,13 +1,13 @@
 package com.progress_android.activity_implement;
 
-import Adapter.ImplementELAdapter;
-import Adapter.ImplementTLAdapter;
-import DataBase.DailyPlanDbOperator;
+import Adapter.Implement.ImplementELAdapter;
+import Adapter.Implement.ImplementTLAdapter;
+import DataBase.DailyPlan.DailyPlanDbOperator;
 import Item.DaliyPlan.ExecutedItem;
 import Item.Item;
-import Item.DaliyPlan.ExecutedItemList;
 import Item.DaliyPlan.TimeLineItem;
 import Item.Time.MyTime;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,10 +17,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.progress_android.R;
-import com.progress_android.activity_implement.CenterUtil.CenterLayoutManager;
 import com.progress_android.activity_implement.GalleryUtil.CardScaleHelper;
 
 import java.util.ArrayList;
@@ -35,8 +33,8 @@ import static Item.Item.WAITING;
 
 public class ImplementActivity extends AppCompatActivity {
 
-    String TAG = "ImplementActivity";
-    ExecutedItemList executedItemList;
+    public static String TAG = "ImplementActivity";
+    //ExecutedItemList executedItemList;
     ExecutedItem currentItem;
 
     RecyclerView eventListRecyclerView;
@@ -70,7 +68,7 @@ public class ImplementActivity extends AppCompatActivity {
         int currentPosition = -1;
         for(int i=1; i<timeLine.size()-1; ++i){
             Gson gson = new Gson();
-            Log.d(TAG, "i="+i);
+            //Log.d(TAG, "i="+i);
             ExecutedItem executedItem = timeLine.get(i);
             Log.d(TAG, gson.toJson(executedItem));
             if(executedItem.getStatus()==DOING){
@@ -87,17 +85,16 @@ public class ImplementActivity extends AppCompatActivity {
             }
         }
         timeLinePosition = currentPosition;
-        if(!flag){
+        if(!flag&&currentPosition<0){
             timeLinePosition = timeLine.size()-2;
         }
         assert timeLinePosition>=0;
         currentItem = timeLine.get(timeLinePosition);
-        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
         CardScaleHelper cardScaleHelper = new CardScaleHelper();
         cardScaleHelper.setCurrentItemPos(timeLinePosition);
         cardScaleHelper.attachToRecyclerView(timeLineRecyclerView);
         //l1.smoothScrollToPosition(timeLineRecyclerView, );
-
+        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
         if(currentItem.getStatus()==DOING){
             nextMatter = false;
         }
@@ -111,6 +108,7 @@ public class ImplementActivity extends AppCompatActivity {
             Toast.makeText(this, "当前任务还未完成哦", Toast.LENGTH_SHORT).show();
             return false;
         }
+        nextMatter = false;
         //记录统计数据
         Date date = new Date();
         MyTime startTime = new MyTime(date.getHours(), date.getMinutes());
@@ -122,9 +120,8 @@ public class ImplementActivity extends AppCompatActivity {
         item.setTimeLineItem(timelineItem);
         item.setStatus(DOING);
 
-        timeLinePosition = timeLineAdapter.startMatter(item);
+        timeLineAdapter.startMatter(item, timeLinePosition);
         Log.d(TAG, "从EventList开始任务："+eventPosition);
-        Log.d(TAG, "插入TimeLine位置："+timeLinePosition);
         eventListAdapter.notifyItemChanged(eventPosition);
 
         timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
@@ -140,16 +137,18 @@ public class ImplementActivity extends AppCompatActivity {
         Log.d(TAG, "当前timeLine position为"+this.timeLinePosition);
         if(position != this.timeLinePosition){
             Log.d(TAG, "开始position为"+position+" 的任务");
-            new MaterialAlertDialogBuilder(this, R.style.dialogTheme)
-                    .setTitle("提示")
-                    .setMessage("还有任务没有完成，确定要直接开始吗？")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder .setTitle("提示")
+                    .setMessage("还有任务没有完成，要取消它们并直接开始吗")
+                    .setCancelable(false)   //这个函数不起作用
+                    .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             skipMatter(position);
                         }
                     })
-                    .show();
+                    .setNegativeButton(R.string.cancel, null)
+                    .create().show();
         }
         timeLinePosition = position;
         nextMatter = false;
@@ -157,17 +156,19 @@ public class ImplementActivity extends AppCompatActivity {
         currentItem.setStatus(DOING);
         currentItem.addStartTime(new MyTime(new Date()));
         timeLineAdapter.notifyItemChanged(timeLinePosition);
-        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
+        //timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
     }
 
     private void skipMatter(int position){
         for(int i=1; i<position; ++i){
             ExecutedItem item = timeLine.get(i);
             if(item.getStatus()==WAITING){
+                Log.d(TAG, "item:"+item.getContent()+"被取消");
                 item.setStatus(CANCEL);
             }
         }
         timeLineAdapter.notifyDataSetChanged();
+        timeLineRecyclerView.smoothScrollToPosition(position);
         //eventListAdapter.notifyItemChanged();
     }
 
@@ -179,6 +180,7 @@ public class ImplementActivity extends AppCompatActivity {
         //更新eventList数据
         nextMatter = true;
         currentItem.setStatus(status);
+        Log.d(TAG, "item:"+currentItem.getContent()+" 被"+Item.statusText[status]);
         if(currentItem.isEventItem()){
             if(status==CANCEL) {
                 eventListAdapter.cancelMatter(currentItem, eventPosition);
@@ -189,8 +191,9 @@ public class ImplementActivity extends AppCompatActivity {
             }
         }
         //统计数据更新
+
         currentItem.addEndTime(new MyTime(new Date()));
-        executedItemList.addExecutedItem(currentItem);
+        //executedItemList.addExecutedItem(currentItem);
 
         timeLineAdapter.notifyItemChanged(timeLinePosition);
         //推进到时间轴的下一个事件，等待用户选择开始或取消
@@ -200,15 +203,16 @@ public class ImplementActivity extends AppCompatActivity {
         if(boost) {
             ++timeLinePosition;
             currentItem = timeLine.get(timeLinePosition);
+            currentItem.setStatus(Item.WAITING);
+            timeLineAdapter.notifyItemChanged(timeLinePosition);
+            timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
         }
-        currentItem.setStatus(Item.WAITING);
-        timeLineAdapter.notifyItemChanged(timeLinePosition);
-        timeLineRecyclerView.smoothScrollToPosition(timeLinePosition);
     }
 
     public void initData(){
         if(!DailyPlanDbOperator.checkDate(this)){
             Toast.makeText(this, "还没有制定今日的计划！", Toast.LENGTH_SHORT).show();
+            //return;
         }
         Log.d(TAG, "read daily plan data");
         eventList = DailyPlanDbOperator.getExecutedEventListData(this);
@@ -233,6 +237,7 @@ public class ImplementActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
         saveDate();
     }
